@@ -19,7 +19,6 @@ class CurlClientTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException        \Issei\Spike\Exception
      * @expectedExceptionCode    1
-     * @expectedExceptionMessage Protocol "ttp" not supported or disabled in libcurl
      */
     public function testRequestWithInvalidUrl()
     {
