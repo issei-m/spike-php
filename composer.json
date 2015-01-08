@@ -1,4 +1,13 @@
 {
+    "name": "issei-m/spike",
+    "description": "Handles https://spike.cc REST api.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Issei Murasawa",
+            "email": "issei.m7@gmail.com"
+        }
+    ],
     "require": {
         "php": ">= 5.4"
     },
