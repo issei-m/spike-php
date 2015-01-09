@@ -1,10 +1,12 @@
 Spike
 =====
 
+[![Build Status](https://travis-ci.org/issei-m/spike.svg)](https://travis-ci.org/issei-m/spike)
+[![Coverage Status](https://coveralls.io/repos/issei-m/spike/badge.png?branch=coveralls)](https://coveralls.io/r/issei-m/spike?branch=coveralls)
+[![License](https://poser.pugx.org/issei-m/spike/license.svg)](https://packagist.org/packages/issei-m/spike)
+
 Handles https://spike.cc REST api.  
 **This library is in ALPHA version yet.**
-
-[![Build Status](https://travis-ci.org/issei-m/spike.svg?branch=develop)](https://travis-ci.org/issei-m/spike)
 
 Basic Usage
 -----------
@@ -89,11 +91,5 @@ Contributing
 3. Commit your change and push it
 4. Create a new pull request
 
-License
--------
-
-All contents of this package are licensed under the [MIT license].
-
 [Composer]: https://getcomposer.org
 [@Issei_M]: https://twitter.com/Issei_M
-[MIT license]: LICENSE
