@@ -3,6 +3,7 @@
 namespace Issei\Spike\Tests;
 
 use Issei\Spike\ChargeRequest;
+use Issei\Spike\Exception\ApiErrorException;
 use Issei\Spike\Http\Response;
 use Issei\Spike\Model\Charge;
 use Issei\Spike\Model\Product;
@@ -99,7 +100,12 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
     {
         $this->expect_that_httpClient_returns_response_which_is_appealing_there_is_error();
 
-        $this->SUT->getCharge('');
+        try {
+            $this->SUT->getCharge('');
+        } catch (ApiErrorException $e) {
+            $this->assertEquals('_error_type_', $e->getType());
+            throw $e;
+        }
     }
 
     public function testCharge()
@@ -158,7 +164,12 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
     {
         $this->expect_that_httpClient_returns_response_which_is_appealing_there_is_error();
 
-        $this->SUT->charge(new ChargeRequest());
+        try {
+            $this->SUT->charge(new ChargeRequest());
+        } catch (ApiErrorException $e) {
+            $this->assertEquals('_error_type_', $e->getType());
+            throw $e;
+        }
     }
 
     public function testRefund()
@@ -187,7 +198,12 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
     {
         $this->expect_that_httpClient_returns_response_which_is_appealing_there_is_error();
 
-        $this->SUT->refund(new Charge(''));
+        try {
+            $this->SUT->refund(new Charge(''));
+        } catch (ApiErrorException $e) {
+            $this->assertEquals('_error_type_', $e->getType());
+            throw $e;
+        }
     }
 
     private function expect_that_httpClient_returns_response_which_is_appealing_there_is_error()
