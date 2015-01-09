@@ -1,11 +1,11 @@
-Spike
-=====
+Spike for PHP
+=============
 
-[![Build Status](https://travis-ci.org/issei-m/spike.svg)](https://travis-ci.org/issei-m/spike)
-[![Coverage Status](https://coveralls.io/repos/issei-m/spike/badge.png?branch=coveralls)](https://coveralls.io/r/issei-m/spike?branch=coveralls)
-[![License](https://poser.pugx.org/issei-m/spike/license.svg)](https://packagist.org/packages/issei-m/spike)
+[![Build Status](https://travis-ci.org/issei-m/spike-php.svg)](https://travis-ci.org/issei-m/spike-php)
+[![Coverage Status](https://coveralls.io/repos/issei-m/spike-php/badge.png)](https://coveralls.io/r/issei-m/spike-php)
+[![License](https://poser.pugx.org/issei-m/spike-php/license.svg)](https://packagist.org/packages/issei-m/spike-php)
 
-Handles https://spike.cc REST api.  
+The client of https://spike.cc REST api for PHP.  
 **This library is in ALPHA version yet.**
 
 Basic Usage
@@ -80,7 +80,7 @@ Installation
 Use [Composer] to install the package:
 
 ```
-$ composer require issei-m/spike
+$ composer require issei-m/spike-php
 ```
 
 Contributing
@@ -92,4 +92,3 @@ Contributing
 4. Create a new pull request
 
 [Composer]: https://getcomposer.org
-[@Issei_M]: https://twitter.com/Issei_M

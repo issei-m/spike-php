@@ -1,6 +1,6 @@
 {
-    "name": "issei-m/spike",
-    "description": "Handles https://spike.cc REST api.",
+    "name": "issei-m/spike-php",
+    "description": "The client of https://spike.cc REST api for PHP.",
     "license": "MIT",
     "authors": [
         {
