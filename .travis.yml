@@ -5,17 +5,15 @@ php:
   - 5.5
   - 5.6
 #  - hhvm
-#
-#matrix:
-#    allow_failures:
-#        - php: hhvm
 
 before_script:
+    - composer self-update
     - composer install --dev --no-interaction
     - mkdir -p build/logs
 
 script:
-    - vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover build/logs/clover.xml
+    - vendor/bin/phpunit -c phpunit.xml.dist --coverage-text --coverage-clover=coverage.clover
 
 after_script:
-    - vendor/bin/coveralls
+    - wget https://scrutinizer-ci.com/ocular.phar
+    - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
