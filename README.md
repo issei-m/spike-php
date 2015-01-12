@@ -2,7 +2,8 @@ Spike for PHP
 =============
 
 [![Build Status](https://travis-ci.org/issei-m/spike-php.svg)](https://travis-ci.org/issei-m/spike-php)
-[![Coverage Status](https://coveralls.io/repos/issei-m/spike-php/badge.png)](https://coveralls.io/r/issei-m/spike-php)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/issei-m/spike-php/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/issei-m/spike-php/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/issei-m/spike-php/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/issei-m/spike-php/?branch=master)
 [![License](https://poser.pugx.org/issei-m/spike-php/license.svg)](https://packagist.org/packages/issei-m/spike-php)
 
 The client of https://spike.cc REST api for PHP.  
@@ -11,7 +12,7 @@ The client of https://spike.cc REST api for PHP.
 Basic Usage
 -----------
 
-First, initialize the `Spike` object by your **api secret key**. It's the entry point for accessing the all api interface.
+First, initialize the `Spike` object with your **api secret key**. It's the entry point for accessing the all api interface:
 
 ```php
 $spike = new \Issei\Spike\Spike('your_api_secret_key');
@@ -57,7 +58,7 @@ $createdCharge = $spike->charge($request);
 $refundedCharge = $spike->refund($charge);
 ```
 
-Note: Refunding needs only `Charge`'s id. So you can also use a manually initialized one by id to refund:
+Tips: Refund needs only `Charge`'s id, so you can also use an initialized one by the id manually:
 
 ```php
 $charge = new \Spike\Model\Charge('charge_identifier');
