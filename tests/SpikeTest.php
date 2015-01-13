@@ -16,12 +16,12 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $chargeFactory;
+    private $httpClient;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $httpClient;
+    private $chargeFactory;
 
     /**
      * @var Spike
@@ -30,10 +30,10 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->chargeFactory = $this->getMockBuilder('Issei\Spike\Model\Factory\ChargeFactory')->disableOriginalConstructor()->getMock();
         $this->httpClient = $this->getMock('Issei\Spike\Http\ClientInterface');
+        $this->chargeFactory = $this->getMockBuilder('Issei\Spike\Model\Factory\ChargeFactory')->disableOriginalConstructor()->getMock();
 
-        $this->SUT = new Spike(self::SECRET, $this->chargeFactory, $this->httpClient);
+        $this->SUT = new Spike(self::SECRET, $this->httpClient, $this->chargeFactory);
     }
 
     public function testGetCharges()
@@ -67,7 +67,7 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
      * @expectedExceptionCode    400
      * @expectedExceptionMessage _error_message_
      */
-    public function getCharges_should_throw_Exception_if_api_returns_error()
+    public function getCharges_should_throw_Exception_if_api_returned_error()
     {
         $this->expect_that_httpClient_returns_response_which_is_appealing_there_is_error();
 
@@ -96,7 +96,7 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
      * @expectedExceptionCode    400
      * @expectedExceptionMessage _error_message_
      */
-    public function getCharge_should_throw_Exception_if_api_returns_error()
+    public function getCharge_should_throw_Exception_if_api_returned_error()
     {
         $this->expect_that_httpClient_returns_response_which_is_appealing_there_is_error();
 
@@ -119,6 +119,7 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
                 (new Product('pA_id'))
                     ->setTitle('pA')
                     ->setDescription('pA_description')
+                    ->setPrice(500)
                     ->setCurrency('JPY')
                     ->setLanguage('JP')
                     ->setCount(1)
@@ -128,8 +129,9 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
                 (new Product('pB_id'))
                     ->setTitle('pB')
                     ->setDescription('pB_description')
-                    ->setCurrency('USD')
-                    ->setLanguage('US')
+                    ->setPrice(500)
+                    ->setCurrency('JPY')
+                    ->setLanguage('JP')
                     ->setCount(3)
                     ->setStock(5)
             )
@@ -160,7 +162,7 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
      * @expectedExceptionCode    400
      * @expectedExceptionMessage _error_message_
      */
-    public function charge_should_throw_Exception_if_api_returns_error()
+    public function charge_should_throw_Exception_if_api_returned_error()
     {
         $this->expect_that_httpClient_returns_response_which_is_appealing_there_is_error();
 
@@ -194,7 +196,7 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
      * @expectedExceptionCode    400
      * @expectedExceptionMessage _error_message_
      */
-    public function refund_should_throw_Exception_if_api_returns_error()
+    public function refund_should_throw_Exception_if_api_returned_error()
     {
         $this->expect_that_httpClient_returns_response_which_is_appealing_there_is_error();
 

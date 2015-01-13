@@ -24,16 +24,16 @@ class Spike
     private $secret;
 
     /**
-     * @var ChargeFactory
-     */
-    private $chargeFactory;
-
-    /**
      * @var ClientInterface
      */
     private $httpClient;
 
-    public function __construct($secret, ChargeFactory $chargeFactory = null, ClientInterface $httpClient = null)
+    /**
+     * @var ChargeFactory
+     */
+    private $chargeFactory;
+
+    public function __construct($secret, ClientInterface $httpClient = null, ChargeFactory $chargeFactory = null)
     {
         $this->secret        = $secret;
         $this->chargeFactory = $chargeFactory ?: new ChargeFactory(new RefundFactory());
