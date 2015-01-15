@@ -17,10 +17,9 @@ class CurlClient implements ClientInterface
     public function request($method, $url, $secret, array $params = [])
     {
         $options = [
-            CURLOPT_URL            => $url,
             CURLOPT_USERPWD        => $secret . ':',
             CURLOPT_CONNECTTIMEOUT => 10,
-            CURLOPT_TIMEOUT        => 60,
+            CURLOPT_TIMEOUT        => 30,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_SSL_VERIFYHOST => 2,
             CURLOPT_SSL_VERIFYPEER => true,
@@ -31,20 +30,19 @@ class CurlClient implements ClientInterface
             $options[CURLOPT_POSTFIELDS] = $params;
         }
 
-        $curl = curl_init();
+        $curl = curl_init($url);
         curl_setopt_array($curl, $options);
 
         $body = curl_exec($curl);
 
         if (false === $body) {
-            $message = curl_error($curl);
-            $code    = curl_errno($curl);
+            $exception = new Exception(curl_error($curl), curl_errno($curl));
+            curl_close($curl);
 
-            throw new Exception($message, $code);
+            throw $exception;
         }
 
-        $response = new Response(curl_getinfo($curl)['http_code'], $body);
-
+        $response = new Response(curl_getinfo($curl, CURLINFO_HTTP_CODE), $body);
         curl_close($curl);
 
         return $response;

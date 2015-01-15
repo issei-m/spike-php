@@ -31,8 +31,10 @@ class GuzzleHttpClient implements ClientInterface
     public function request($method, $url, $secret, array $params = [])
     {
         $options = [
-            'auth'   => [$secret, ''],
-            'verify' => true,
+            'auth'            => [$secret, ''],
+            'connect_timeout' => 10,
+            'timeout'         => 30,
+            'verify'          => true,
         ];
 
         if ('GET' !== $method) {
@@ -43,12 +45,10 @@ class GuzzleHttpClient implements ClientInterface
 
         try {
             $rawResponse = $this->client->send($request);
-        } catch (RequestException $e) {
-            if (!$e instanceof BadResponseException) {
-                throw new Exception($e->getMessage(), $e->getCode());
-            }
-
+        } catch (BadResponseException $e) {
             $rawResponse = $e->getResponse();
+        } catch (RequestException $e) {
+            throw new Exception($e->getMessage(), $e->getCode());
         }
 
         return new Response($rawResponse->getStatusCode(), $rawResponse->getBody());
