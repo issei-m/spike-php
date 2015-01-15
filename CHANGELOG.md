@@ -2,6 +2,7 @@ Changelog
 =========
 
 - 1.0-BETA1 (2015-01-xx)
+  - Exception now extends \RuntimeException
   - now supports GuzzleHttp client as implementation of ClientInterface
   - changed Spike::__construct signature
 
