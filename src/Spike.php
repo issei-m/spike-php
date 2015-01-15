@@ -84,8 +84,8 @@ class Spike
     {
         $result = $this->request('POST', '/charges', [
             'card'     => $request->getCard(),
-            'currency' => $request->getCurrency(),
-            'amount'   => $request->getAmount(),
+            'amount'   => $request->getAmount()->getAmount(),
+            'currency' => $request->getAmount()->getCurrency(),
             'products' => json_encode($request->getProducts()),
         ]);
 

@@ -2,25 +2,19 @@
 
 namespace Issei\Spike\Model;
 
+use Issei\Spike\MoneyFactoryTrait;
+
 /**
  * @author Issei Murasawa <issei.m7@gmail.com>
  */
 class Refund
 {
+    use MoneyFactoryTrait;
+
     /**
      * @var \DateTime
      */
     private $created;
-
-    /**
-     * @var float
-     */
-    private $amount;
-
-    /**
-     * @var string
-     */
-    private $currency;
 
     /**
      * @return \DateTime
@@ -34,7 +28,7 @@ class Refund
      * @param  \DateTime $created
      * @return self
      */
-    public function setCreated($created)
+    public function setCreated(\DateTime $created)
     {
         $this->created = $created;
 
@@ -42,7 +36,7 @@ class Refund
     }
 
     /**
-     * @return float
+     * @return Money
      */
     public function getAmount()
     {
@@ -50,31 +44,18 @@ class Refund
     }
 
     /**
-     * @param  float $amount
-     * @return self
+     * @var Money
      */
-    public function setAmount($amount)
-    {
-
-        $this->amount = $amount;
-        return $this;
-    }
+    private $amount;
 
     /**
-     * @return string
-     */
-    public function getCurrency()
-    {
-        return $this->currency;
-    }
-
-    /**
-     * @param  string $currency
+     * @param  Money|float $amount
+     * @param  string|null $currency
      * @return self
      */
-    public function setCurrency($currency)
+    public function setAmount($amount, $currency = null)
     {
-        $this->currency = $currency;
+        $this->amount = $this->createMoney($amount, $currency);
 
         return $this;
     }

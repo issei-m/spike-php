@@ -3,6 +3,7 @@
 namespace Issei\Spike\Tests\Model\Factory;
 
 use Issei\Spike\Model\Factory\RefundFactory;
+use Issei\Spike\Model\Money;
 
 class RefundFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,8 +30,7 @@ class RefundFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Issei\Spike\Model\Refund', $refund);
         $this->assertEquals($created, $refund->getCreated());
         $this->assertEquals('+00:00', $refund->getCreated()->getTimezone()->getName());
-        $this->assertSame(5000.0, $refund->getAmount());
-        $this->assertSame('JPY', $refund->getCurrency());
+        $this->assertEquals(new Money(5000.0, 'JPY'), $refund->getAmount());
     }
 
     /**

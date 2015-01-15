@@ -26,18 +26,16 @@ To create a new charge, you have to build a `ChargeRequest` object. It can be sp
 $request = new \Issei\Spike\ChargeRequest();
 $request
     ->setCard('tok_xxxxxxxxxxxxxxxxxxxxxxxx')
-    ->setAmount(150.0) // float
-    ->setCurrency('USD')
-;    
+    ->setAmount(123.45, 'USD') // float
+;
 
 $product = new \Issei\Spike\Model\Product('my-product-00001'))
     ->setTitle('Product Name')
     ->setDescription('Description of Product.')
-    ->setPrice(150.0) // float
-    ->setCurrency('USD')
+    ->setPrice(123.45, 'USD')
     ->setLanguage('EN')
-    ->setCount(3) // integer
-    ->setStock(97) // integer
+    ->setCount(3)
+    ->setStock(97)
 ;
 
 $request->addProduct($product); // The product can be added many times.

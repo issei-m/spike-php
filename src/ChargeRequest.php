@@ -2,6 +2,7 @@
 
 namespace Issei\Spike;
 
+use Issei\Spike\Model\Money;
 use Issei\Spike\Model\Product;
 
 /**
@@ -11,13 +12,10 @@ use Issei\Spike\Model\Product;
  */
 class ChargeRequest
 {
-    /**
-     * @var string
-     */
-    private $currency;
+    use MoneyFactoryTrait;
 
     /**
-     * @var float
+     * @var Money
      */
     private $amount;
 
@@ -32,26 +30,7 @@ class ChargeRequest
     private $products = [];
 
     /**
-     * @return string
-     */
-    public function getCurrency()
-    {
-        return $this->currency;
-    }
-
-    /**
-     * @param  string $currency
-     * @return self
-     */
-    public function setCurrency($currency)
-    {
-        $this->currency = $currency;
-
-        return $this;
-    }
-
-    /**
-     * @return float
+     * @return Money
      */
     public function getAmount()
     {
@@ -59,12 +38,13 @@ class ChargeRequest
     }
 
     /**
-     * @param  float $amount
+     * @param  Money|float $amount
+     * @param  string|null $currency
      * @return self
      */
-    public function setAmount($amount)
+    public function setAmount($amount, $currency = null)
     {
-        $this->amount = $amount;
+        $this->amount = $this->createMoney($amount, $currency);
 
         return $this;
     }

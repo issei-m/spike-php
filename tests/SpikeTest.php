@@ -6,6 +6,7 @@ use Issei\Spike\ChargeRequest;
 use Issei\Spike\Exception\ApiErrorException;
 use Issei\Spike\Http\Response;
 use Issei\Spike\Model\Charge;
+use Issei\Spike\Model\Money;
 use Issei\Spike\Model\Product;
 use Issei\Spike\Spike;
 
@@ -30,18 +31,50 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->httpClient = $this->getMock('Issei\Spike\Http\ClientInterface');
+        $this->httpClient    = $this->getMock('Issei\Spike\Http\ClientInterface');
         $this->chargeFactory = $this->getMockBuilder('Issei\Spike\Model\Factory\ChargeFactory')->disableOriginalConstructor()->getMock();
 
         $this->SUT = new Spike(self::SECRET, $this->httpClient, $this->chargeFactory);
+    }
+
+    /**
+     * @return ChargeRequest
+     */
+    private function createCharge()
+    {
+        $request = new ChargeRequest();
+        $request
+            ->setCard('_card_')
+            ->setAmount(new Money(1000, 'JPY'))
+            ->addProduct(
+                (new Product('product-a'))
+                    ->setTitle('Product.A')
+                    ->setDescription('This is Product.A')
+                    ->setPrice(new Money(500, 'JPY'))
+                    ->setLanguage('JP')
+                    ->setCount(1)
+                    ->setStock(10)
+            )
+            ->addProduct(
+                (new Product('product-b'))
+                    ->setTitle('Product.B')
+                    ->setDescription('This is Product.B')
+                    ->setPrice(new Money(500, 'JPY'))
+                    ->setLanguage('JP')
+                    ->setCount(3)
+                    ->setStock(5)
+            )
+        ;
+
+        return $request;
     }
 
     public function testGetCharges()
     {
         $response = new Response(200, json_encode([
             'data' => [
-                ['chargeA'],
-                ['chargeB'],
+                ['charge-a-data'],
+                ['charge-b-data'],
             ],
         ]));
 
@@ -52,10 +85,10 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($response))
         ;
 
-        $chargeA = new Charge('');
-        $chargeB = new Charge('');
-        $this->chargeFactory->expects($this->at(0))->method('create')->with(['chargeA'])->will($this->returnValue($chargeA));
-        $this->chargeFactory->expects($this->at(1))->method('create')->with(['chargeB'])->will($this->returnValue($chargeB));
+        $chargeA = new Charge('charge-a');
+        $chargeB = new Charge('charge-b');
+        $this->chargeFactory->expects($this->at(0))->method('create')->with(['charge-a-data'])->will($this->returnValue($chargeA));
+        $this->chargeFactory->expects($this->at(1))->method('create')->with(['charge-b-data'])->will($this->returnValue($chargeB));
 
         $this->assertSame([$chargeA, $chargeB], $this->SUT->getCharges(3));
     }
@@ -110,47 +143,22 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
 
     public function testCharge()
     {
-        $request = new ChargeRequest();
-        $request
-            ->setCard('_card_')
-            ->setAmount(1000)
-            ->setCurrency('JPY')
-            ->addProduct(
-                (new Product('pA_id'))
-                    ->setTitle('pA')
-                    ->setDescription('pA_description')
-                    ->setPrice(500)
-                    ->setCurrency('JPY')
-                    ->setLanguage('JP')
-                    ->setCount(1)
-                    ->setStock(10)
-            )
-            ->addProduct(
-                (new Product('pB_id'))
-                    ->setTitle('pB')
-                    ->setDescription('pB_description')
-                    ->setPrice(500)
-                    ->setCurrency('JPY')
-                    ->setLanguage('JP')
-                    ->setCount(3)
-                    ->setStock(5)
-            )
-        ;
+        $request = $this->createCharge();
 
         $this->httpClient
             ->expects($this->once())
             ->method('request')
             ->with('POST', Spike::ENDPOINT_PREFIX . '/charges', self::SECRET, [
                 'card'     => $request->getCard(),
-                'currency' => $request->getCurrency(),
-                'amount'   => $request->getAmount(),
+                'amount'   => $request->getAmount()->getAmount(),
+                'currency' => $request->getAmount()->getCurrency(),
                 'products' => json_encode($request->getProducts()),
             ])
-            ->will($this->returnValue(new Response(200, json_encode(['charge']))))
+            ->will($this->returnValue(new Response(200, json_encode(['charge-c-data']))))
         ;
 
-        $charge = new Charge('123');
-        $this->chargeFactory->expects($this->once())->method('create')->with(['charge'])->will($this->returnValue($charge));
+        $charge = new Charge('charge-c');
+        $this->chargeFactory->expects($this->once())->method('create')->with(['charge-c-data'])->will($this->returnValue($charge));
 
         $this->assertSame($charge, $this->SUT->charge($request));
     }
@@ -167,7 +175,7 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
         $this->expect_that_httpClient_returns_response_which_is_appealing_there_is_error();
 
         try {
-            $this->SUT->charge(new ChargeRequest());
+            $this->SUT->charge($this->createCharge());
         } catch (ApiErrorException $e) {
             $this->assertEquals('_error_type_', $e->getType());
             throw $e;
@@ -179,14 +187,14 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
         $this->httpClient
             ->expects($this->once())
             ->method('request')
-            ->with('POST', Spike::ENDPOINT_PREFIX . '/charges/123/refund', self::SECRET, [])
-            ->will($this->returnValue(new Response(200, json_encode(['charge']))))
+            ->with('POST', Spike::ENDPOINT_PREFIX . '/charges/charge-a/refund', self::SECRET, [])
+            ->will($this->returnValue(new Response(200, json_encode(['charge-a-data']))))
         ;
 
-        $charge = new Charge('123');
-        $this->chargeFactory->expects($this->once())->method('create')->with(['charge'])->will($this->returnValue($charge));
+        $charge = new Charge('charge-a');
+        $this->chargeFactory->expects($this->once())->method('create')->with(['charge-a-data'])->will($this->returnValue($charge));
 
-        $this->assertSame($charge, $this->SUT->refund(new Charge('123')));
+        $this->assertSame($charge, $this->SUT->refund(new Charge('charge-a')));
     }
 
     /**

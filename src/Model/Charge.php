@@ -2,11 +2,15 @@
 
 namespace Issei\Spike\Model;
 
+use Issei\Spike\MoneyFactoryTrait;
+
 /**
  * @author Issei Murasawa <issei.m7@gmail.com>
  */
 class Charge
 {
+    use MoneyFactoryTrait;
+
     /**
      * @var string
      */
@@ -28,14 +32,9 @@ class Charge
     private $captured;
 
     /**
-     * @var float
+     * @var Money
      */
     private $amount;
-
-    /**
-     * @var string
-     */
-    private $currency;
 
     /**
      * @var Boolean
@@ -43,7 +42,7 @@ class Charge
     private $refunded;
 
     /**
-     * @var float
+     * @var Money
      */
     private $amountRefunded;
 
@@ -123,7 +122,7 @@ class Charge
     }
 
     /**
-     * @return float
+     * @return Money
      */
     public function getAmount()
     {
@@ -131,31 +130,13 @@ class Charge
     }
 
     /**
-     * @param  float $amount
+     * @param  Money|float $amount
+     * @param  string|null $currency
      * @return self
      */
-    public function setAmount($amount)
+    public function setAmount($amount, $currency = null)
     {
-        $this->amount = $amount;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCurrency()
-    {
-        return $this->currency;
-    }
-
-    /**
-     * @param  string $currency
-     * @return self
-     */
-    public function setCurrency($currency)
-    {
-        $this->currency = $currency;
+        $this->amount = $this->createMoney($amount, $currency);
 
         return $this;
     }
@@ -180,7 +161,7 @@ class Charge
     }
 
     /**
-     * @return float
+     * @return Money
      */
     public function getAmountRefunded()
     {
@@ -188,12 +169,13 @@ class Charge
     }
 
     /**
-     * @param  float $amountRefunded
+     * @param  Money|float $amountRefunded
+     * @param  string|null $currency
      * @return self
      */
-    public function setAmountRefunded($amountRefunded)
+    public function setAmountRefunded($amountRefunded, $currency = null)
     {
-        $this->amountRefunded = $amountRefunded;
+        $this->amountRefunded = $this->createMoney($amountRefunded, $currency);
 
         return $this;
     }

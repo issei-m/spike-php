@@ -2,11 +2,15 @@
 
 namespace Issei\Spike\Model;
 
+use Issei\Spike\MoneyFactoryTrait;
+
 /**
  * @author Issei Murasawa <issei.m7@gmail.com>
  */
 class Product implements \JsonSerializable
 {
+    use MoneyFactoryTrait;
+
     /**
      * @var string
      */
@@ -28,14 +32,9 @@ class Product implements \JsonSerializable
     private $language;
 
     /**
-     * @var float
+     * @var Money
      */
     private $price;
-
-    /**
-     * @var string
-     */
-    private $currency;
 
     /**
      * @var integer
@@ -62,8 +61,8 @@ class Product implements \JsonSerializable
             'title'       => $this->title,
             'description' => $this->description,
             'language'    => $this->language,
-            'price'       => $this->price,
-            'currency'    => $this->currency,
+            'price'       => $this->price->getAmount(),
+            'currency'    => $this->price->getCurrency(),
             'count'       => $this->count,
             'stock'       => $this->stock,
         ];
@@ -135,7 +134,7 @@ class Product implements \JsonSerializable
     }
 
     /**
-     * @return float
+     * @return Money
      */
     public function getPrice()
     {
@@ -143,31 +142,13 @@ class Product implements \JsonSerializable
     }
 
     /**
-     * @param  float $price
+     * @param  Money|float $price
+     * @param  string|null $currency
      * @return self
      */
-    public function setPrice($price)
+    public function setPrice($price, $currency = null)
     {
-        $this->price = $price;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCurrency()
-    {
-        return $this->currency;
-    }
-
-    /**
-     * @param  string $currency
-     * @return self
-     */
-    public function setCurrency($currency)
-    {
-        $this->currency = $currency;
+        $this->price = $this->createMoney($price, $currency);
 
         return $this;
     }

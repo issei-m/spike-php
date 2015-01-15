@@ -3,6 +3,7 @@
 namespace Issei\Spike\Model\Factory;
 
 use Issei\Spike\Model\Charge;
+use Issei\Spike\Model\Money;
 
 /**
  * Creates a new charge object with json that retrieved from api.
@@ -37,10 +38,9 @@ class ChargeFactory
             ->setCreated($this->createDateTimeByUnixTime($json['created']))
             ->setPaid($json['paid'])
             ->setCaptured($json['captured'])
-            ->setAmount(floatval($json['amount']))
-            ->setCurrency($json['currency'])
+            ->setAmount(new Money(floatval($json['amount']), $json['currency']))
             ->setRefunded($json['refunded'])
-            ->setAmountRefunded(floatval($json['amount_refunded']))
+            ->setAmountRefunded(new Money(floatval($json['amount_refunded']), $json['currency']))
         ;
 
         foreach ($json['refunds'] as $refundJson) {

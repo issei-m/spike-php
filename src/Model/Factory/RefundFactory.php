@@ -2,6 +2,7 @@
 
 namespace Issei\Spike\Model\Factory;
 
+use Issei\Spike\Model\Money;
 use Issei\Spike\Model\Refund;
 
 /**
@@ -29,8 +30,7 @@ class RefundFactory
         $refund = new Refund();
         $refund
             ->setCreated($this->createDateTimeByUnixTime($json['created']))
-            ->setAmount(floatval($json['amount']))
-            ->setCurrency($json['currency'])
+            ->setAmount(new Money(floatval($json['amount']), $json['currency']))
         ;
 
         return $refund;
