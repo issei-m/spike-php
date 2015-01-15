@@ -33,6 +33,11 @@ class CurlClient implements ClientInterface
         $curl = curl_init($url);
         curl_setopt_array($curl, $options);
 
+        return $this->requestByCurl($curl);
+    }
+
+    private function requestByCurl($curl)
+    {
         $body = curl_exec($curl);
 
         if (false === $body) {

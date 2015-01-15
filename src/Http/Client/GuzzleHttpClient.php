@@ -45,12 +45,19 @@ class GuzzleHttpClient implements ClientInterface
 
         try {
             $rawResponse = $this->client->send($request);
-        } catch (BadResponseException $e) {
-            $rawResponse = $e->getResponse();
         } catch (RequestException $e) {
-            throw new Exception($e->getMessage(), $e->getCode());
+            $rawResponse = $this->handleException($e);
         }
 
         return new Response($rawResponse->getStatusCode(), $rawResponse->getBody());
+    }
+
+    private function handleException(RequestException $exception)
+    {
+        if ($exception instanceof BadResponseException) {
+            return $exception->getResponse();
+        }
+
+        throw new Exception($exception->getMessage(), $exception->getCode());
     }
 }
