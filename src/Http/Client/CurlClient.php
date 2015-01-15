@@ -24,7 +24,6 @@ class CurlClient implements ClientInterface
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_SSL_VERIFYHOST => 2,
             CURLOPT_SSL_VERIFYPEER => true,
-            CURLOPT_CAINFO         => __DIR__ . '/certs/DigiCertHighAssuranceEVRootCA.crt',
         ];
 
         if ('GET' !== $method) {
