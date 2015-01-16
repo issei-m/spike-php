@@ -1,7 +1,7 @@
 Changelog
 =========
 
-- 1.0-BETA1 (2015-01-xx)
+- 1.0-BETA1 (2015-01-16)
   - renamed ApiErrorException to RequestException and changed its constructor signature
   - now uses Money class for dealing with money
   - Exception now extends \RuntimeException

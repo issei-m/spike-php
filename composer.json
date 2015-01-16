@@ -1,6 +1,7 @@
 {
     "name": "issei-m/spike-php",
     "description": "The client of https://spike.cc REST api for PHP.",
+    "keywords": ["spike", "spike.cc", "payments", "rest"],
     "license": "MIT",
     "authors": [
         {
@@ -26,7 +27,7 @@
         }
     },
     "suggest": {
-        "guzzlehttp/guzzle": "Allows for implementation of the Guzzle HTTP client"
+        "guzzlehttp/guzzle": "Allows for implementation of the Guzzle ~4.0 HTTP client"
     },
     "extra": {
         "branch-alias": {
