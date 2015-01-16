@@ -5,19 +5,21 @@ namespace Issei\Spike\Exception;
 use Issei\Spike\Exception;
 
 /**
+ * Indicates error occurred at api (e.g. Authentication failed, Bad request, etc).
+ *
  * @author Issei Murasawa <issei.m7@gmail.com>
  */
-class ApiErrorException extends Exception
+class RequestException extends Exception
 {
     /**
      * @var string
      */
     private $type;
 
-    public function __construct($code, $type, $message)
+    public function __construct($statusCode, array $data)
     {
-        $this->type = $type;
-        parent::__construct($message, $code);
+        $this->type = $data['error']['type'];
+        parent::__construct($data['error']['message'], $statusCode);
     }
 
     /**

@@ -3,7 +3,7 @@
 namespace Issei\Spike\Tests;
 
 use Issei\Spike\ChargeRequest;
-use Issei\Spike\Exception\ApiErrorException;
+use Issei\Spike\Exception\RequestException;
 use Issei\Spike\Http\Response;
 use Issei\Spike\Model\Charge;
 use Issei\Spike\Model\Money;
@@ -96,7 +96,7 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      *
-     * @expectedException        \Issei\Spike\Exception\ApiErrorException
+     * @expectedException        \Issei\Spike\Exception\RequestException
      * @expectedExceptionCode    400
      * @expectedExceptionMessage _error_message_
      */
@@ -125,7 +125,7 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      *
-     * @expectedException        \Issei\Spike\Exception\ApiErrorException
+     * @expectedException        \Issei\Spike\Exception\RequestException
      * @expectedExceptionCode    400
      * @expectedExceptionMessage _error_message_
      */
@@ -135,7 +135,7 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
 
         try {
             $this->SUT->getCharge('');
-        } catch (ApiErrorException $e) {
+        } catch (RequestException $e) {
             $this->assertEquals('_error_type_', $e->getType());
             throw $e;
         }
@@ -166,7 +166,7 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      *
-     * @expectedException        \Issei\Spike\Exception\ApiErrorException
+     * @expectedException        \Issei\Spike\Exception\RequestException
      * @expectedExceptionCode    400
      * @expectedExceptionMessage _error_message_
      */
@@ -176,7 +176,7 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
 
         try {
             $this->SUT->charge($this->createCharge());
-        } catch (ApiErrorException $e) {
+        } catch (RequestException $e) {
             $this->assertEquals('_error_type_', $e->getType());
             throw $e;
         }
@@ -200,7 +200,7 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      *
-     * @expectedException        \Issei\Spike\Exception\ApiErrorException
+     * @expectedException        \Issei\Spike\Exception\RequestException
      * @expectedExceptionCode    400
      * @expectedExceptionMessage _error_message_
      */
@@ -210,7 +210,7 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
 
         try {
             $this->SUT->refund(new Charge(''));
-        } catch (ApiErrorException $e) {
+        } catch (RequestException $e) {
             $this->assertEquals('_error_type_', $e->getType());
             throw $e;
         }

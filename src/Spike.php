@@ -2,7 +2,7 @@
 
 namespace Issei\Spike;
 
-use Issei\Spike\Exception\ApiErrorException;
+use Issei\Spike\Exception\RequestException;
 use Issei\Spike\Model\Charge;
 use Issei\Spike\Model\Factory\ChargeFactory;
 use Issei\Spike\Model\Factory\RefundFactory;
@@ -46,7 +46,7 @@ class Spike
      * @param  integer $limit
      * @return Charge[]
      *
-     * @throws ApiErrorException
+     * @throws RequestException
      */
     public function getCharges($limit = 10)
     {
@@ -63,7 +63,7 @@ class Spike
      * @param  string $id
      * @return Charge
      *
-     * @throws ApiErrorException
+     * @throws RequestException
      */
     public function getCharge($id)
     {
@@ -78,7 +78,7 @@ class Spike
      * @param  ChargeRequest $request
      * @return Charge
      *
-     * @throws ApiErrorException
+     * @throws RequestException
      */
     public function charge(ChargeRequest $request)
     {
@@ -98,7 +98,7 @@ class Spike
      * @param  Charge $charge
      * @return Charge
      *
-     * @throws ApiErrorException
+     * @throws RequestException
      */
     public function refund(Charge $charge)
     {
@@ -114,7 +114,7 @@ class Spike
         $result = json_decode($response->getBody(), true);
 
         if (400 <= $response->getStatusCode()) {
-            throw new ApiErrorException($response->getStatusCode(), $result['error']['type'], $result['error']['message']);
+            throw new RequestException($response->getStatusCode(), $result);
         }
 
         return $result;
