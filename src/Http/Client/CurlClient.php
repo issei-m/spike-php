@@ -41,7 +41,7 @@ class CurlClient implements ClientInterface
         $body = curl_exec($curl);
 
         if (false === $body) {
-            $exception = new Exception(curl_error($curl), curl_errno($curl));
+            $exception = new Exception(sprintf('#%d %s', curl_errno($curl), curl_error($curl)));
             curl_close($curl);
 
             throw $exception;

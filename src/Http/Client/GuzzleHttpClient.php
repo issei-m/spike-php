@@ -58,6 +58,6 @@ class GuzzleHttpClient implements ClientInterface
             return $exception->getResponse();
         }
 
-        throw new Exception($exception->getMessage(), $exception->getCode());
+        throw new Exception($exception->getMessage());
     }
 }
