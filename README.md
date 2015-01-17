@@ -6,7 +6,7 @@ Spike for PHP
 [![Code Coverage](https://scrutinizer-ci.com/g/issei-m/spike-php/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/issei-m/spike-php/?branch=master)
 [![License](https://poser.pugx.org/issei-m/spike-php/license.svg)](https://packagist.org/packages/issei-m/spike-php)
 
-Latest release: [1.0-BETA1](https://packagist.org/packages/issei-m/spike-php#1.0-BETA1)
+Latest release: [v1.0-BETA1](https://packagist.org/packages/issei-m/spike-php#v1.0-BETA1)
 
 The client of https://spike.cc REST api for PHP (5.4+).
 
@@ -80,7 +80,7 @@ Call `getCharges()` method. it returns an array containing the `Charge` objects.
 /** @var $charges \Spike\Model\Charge[] */
 $charges = $spike->getCharges();
 
-// You can specify the limit of number of records. (default by 10 records)
+// You can specify the limit of number of records. (10 records by default)
 $charges = $spike->getCharges(5);
 ```
 
