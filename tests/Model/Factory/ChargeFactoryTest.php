@@ -20,6 +20,8 @@ class ChargeFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        date_default_timezone_set('Asia/Tokyo');
+
         $this->refundFactory = $this->getMockBuilder('Issei\Spike\Model\Factory\RefundFactory')->disableOriginalConstructor()->getMock();
         $this->SUT = new ChargeFactory($this->refundFactory);
     }
@@ -51,7 +53,7 @@ class ChargeFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Issei\Spike\Model\Charge', $charge);
         $this->assertEquals('charge-id', $charge->getId());
         $this->assertEquals($created, $charge->getCreated());
-        $this->assertEquals('+00:00', $charge->getCreated()->getTimezone()->getName());
+        $this->assertEquals('+0900', $charge->getCreated()->format('O'), 'default timezone is used by default');
         $this->assertEquals(new Money(5000.0, 'JPY'), $charge->getAmount());
         $this->assertTrue($charge->isPaid());
         $this->assertTrue($charge->isCaptured());
@@ -67,7 +69,7 @@ class ChargeFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function it_should_be_timezone_specifiable_for_created()
     {
-        $this->SUT = new ChargeFactory($this->refundFactory, new \DateTimeZone('Asia/Tokyo'));
+        $this->SUT = new ChargeFactory($this->refundFactory, new \DateTimeZone('Asia/Singapore'));
 
         $created = new \DateTime('2015/01/01 10:00:00', new \DateTimeZone('UTC'));
         $json = [
@@ -83,6 +85,6 @@ class ChargeFactoryTest extends \PHPUnit_Framework_TestCase
         ];
 
         $refund = $this->SUT->create($json);
-        $this->assertEquals('Asia/Tokyo', $refund->getCreated()->getTimezone()->getName());
+        $this->assertEquals('+0800', $refund->getCreated()->format('O'));
     }
 }

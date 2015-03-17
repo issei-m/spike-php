@@ -22,7 +22,7 @@ class ChargeFactory
     public function __construct(RefundFactory $refundFactory, \DateTimeZone $specifiedTimeZone = null)
     {
         $this->refundFactory     = $refundFactory;
-        $this->specifiedTimeZone = $specifiedTimeZone;
+        $this->specifiedTimeZone = $specifiedTimeZone ?: new \DateTimeZone(date_default_timezone_get());
     }
 
     /**

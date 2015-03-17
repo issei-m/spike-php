@@ -16,7 +16,7 @@ class RefundFactory
 
     public function __construct(\DateTimeZone $specifiedTimeZone = null)
     {
-        $this->specifiedTimeZone = $specifiedTimeZone;
+        $this->specifiedTimeZone = $specifiedTimeZone ?: new \DateTimeZone(date_default_timezone_get());
     }
 
     /**
