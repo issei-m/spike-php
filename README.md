@@ -8,7 +8,7 @@ Spike for PHP
 
 Latest release: [v1.0-BETA1](https://packagist.org/packages/issei-m/spike-php#v1.0-BETA1)
 
-The client of https://spike.cc REST api for PHP (5.4+).
+The client of https://spike.cc REST api for PHP (5.4+, HHVM).
 
 Basic Usage
 -----------
