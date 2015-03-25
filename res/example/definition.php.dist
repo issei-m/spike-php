@@ -1,0 +1,4 @@
+<?php
+
+define('API_SECRET', 'enter_your_api_secret');
+define('CARD_TOKEN', 'enter_your_card_token');
