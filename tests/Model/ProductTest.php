@@ -7,6 +7,32 @@ use Issei\Spike\Model\Product;
 
 class ProductTest extends \PHPUnit_Framework_TestCase
 {
+    public function testJsonSerialize()
+    {
+        $product = new Product('product');
+
+        $product
+            ->setTitle('title')
+            ->setDescription('description')
+            ->setPrice(new Money(100, 'JPY'))
+            ->setLanguage('JP')
+            ->setCount(1)
+            ->setStock(9)
+        ;
+
+        $expectedJson = json_encode([
+            'id'          => 'product',
+            'title'       => 'title',
+            'description' => 'description',
+            'language'    => 'JP',
+            'price'       => 100,
+            'currency'    => 'JPY',
+            'count'       => 1,
+            'stock'       => 9,
+        ]);
+        $this->assertEquals($expectedJson, json_encode($product));
+    }
+
     public function testAccessors()
     {
         $product = new Product('product');
