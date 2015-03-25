@@ -11,6 +11,9 @@
     <filter>
         <whitelist>
             <directory suffix=".php">./src</directory>
+            <exclude>
+                <directory>./res</directory>
+            </exclude>
         </whitelist>
     </filter>
 </phpunit>
