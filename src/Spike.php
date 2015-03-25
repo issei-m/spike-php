@@ -44,17 +44,26 @@ class Spike
      * Returns the charges.
      *
      * @param  integer $limit
+     * @param  Charge  $startingAfter
+     * @param  Charge  $endingBefore
      * @return Charge[]
      *
      * @throws RequestException
      */
-    public function getCharges($limit = 10)
+    public function getCharges($limit = 10, Charge $startingAfter = null, Charge $endingBefore = null)
     {
-        $result = $this->request('GET', '/charges?limit=' . $limit);
+        $endpointUrl = '/charges?limit=' . $limit;
 
-        return array_map(function ($chargeJson) {
-            return $this->chargeFactory->create($chargeJson);
-        }, $result['data']);
+        if ($startingAfter instanceof Charge) {
+            $endpointUrl .= '&starting_after=' . $startingAfter->getId();
+        }
+        if ($endingBefore instanceof Charge) {
+            $endpointUrl .= '&ending_before=' . $endingBefore->getId();
+        }
+
+        $result = $this->request('GET', $endpointUrl);
+
+        return array_map([$this->chargeFactory, 'create'], $result['data']);
     }
 
     /**

@@ -93,6 +93,27 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
         $this->assertSame([$chargeA, $chargeB], $this->SUT->getCharges(3));
     }
 
+    public function testGetChargesWithStartingAfterAndEndingBefore()
+    {
+        $response = new Response(200, json_encode([
+            'data' => [
+                ['charge-b-data'],
+            ],
+        ]));
+
+        $this->httpClient
+            ->expects($this->once())
+            ->method('request')
+            ->with('GET', Spike::ENDPOINT_PREFIX . '/charges?limit=5&starting_after=charge-a&ending_before=charge-c', self::SECRET, [])
+            ->will($this->returnValue($response))
+        ;
+
+        $charge = new Charge('charge-b');
+        $this->chargeFactory->expects($this->once())->method('create')->with(['charge-b-data'])->will($this->returnValue($charge));
+
+        $this->assertSame([$charge], $this->SUT->getCharges(5, new Charge('charge-a'), new Charge('charge-c')));
+    }
+
     /**
      * @test
      *

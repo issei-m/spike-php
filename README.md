@@ -79,9 +79,26 @@ Call `getCharges()` method. it returns an array containing the `Charge` objects.
 ```php
 /** @var $charges \Spike\Model\Charge[] */
 $charges = $spike->getCharges();
+```
 
-// You can specify the limit of number of records. (10 records by default)
+#### Paging
+
+You can specify the limit of number of records at 1st argument (10 records by default):
+
+```php
 $charges = $spike->getCharges(5);
+```
+
+If you pass a `Charge` object into 2nd argument, you can retrieve charges that older than that (passed charge is NOT included to list):
+
+```php
+$nextCharges = $spike->getCharges(5, $charges[count($charges) - 1]);
+```
+
+At 3rd argument, you can also specify the charge object if you want to retrieve charges that newer than that (passed charge is NOT included to list):
+
+```php
+$nextCharges = $spike->getCharges(5, $charges[count($charges) - 1], ...);
 ```
 
 Installation

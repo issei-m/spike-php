@@ -20,5 +20,8 @@ $req
             ->setLanguage('JA')
     )
 ;
-
 dump($spike->charge($req));
+
+echo '<h1>Retrieve Charges</h1>';
+
+dump($spike->getCharges(5));
