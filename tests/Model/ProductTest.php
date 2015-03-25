@@ -10,7 +10,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function testJsonSerialize()
     {
         $product = new Product('product');
-
         $product
             ->setTitle('title')
             ->setDescription('description')
@@ -19,7 +18,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->setCount(1)
             ->setStock(9)
         ;
-
         $expectedJson = json_encode([
             'id'          => 'product',
             'title'       => 'title',
@@ -31,6 +29,19 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             'stock'       => 9,
         ]);
         $this->assertEquals($expectedJson, json_encode($product));
+
+        $product = new Product('product');
+        $expectedJson = json_encode([
+            'id'          => 'product',
+            'title'       => null,
+            'description' => null,
+            'language'    => null,
+            'price'       => null,
+            'currency'    => null,
+            'count'       => null,
+            'stock'       => null,
+        ]);
+        $this->assertEquals($expectedJson, json_encode($product), 'Should be serializable as json even if has not set any value at all');
     }
 
     public function testAccessors()

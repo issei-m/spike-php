@@ -165,6 +165,31 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     */
+    public function charge_should_avoid_error_even_if_request_has_not_set_any_value_at_all()
+    {
+        $request = new ChargeRequest();
+
+        $this->httpClient
+            ->expects($this->once())
+            ->method('request')
+            ->with('POST', Spike::ENDPOINT_PREFIX . '/charges', self::SECRET, [
+                'card'     => null,
+                'amount'   => null,
+                'currency' => null,
+                'products' => json_encode([]),
+            ])
+            ->willReturn(new Response(200, json_encode(['charge-data'])))
+        ;
+
+        $charge = new Charge('charge');
+        $this->chargeFactory->expects($this->once())->method('create')->with(['charge-data'])->willReturn($charge);
+
+        $this->assertSame($charge, $this->SUT->charge($request));
+    }
+
+    /**
+     * @test
      *
      * @expectedException        \Issei\Spike\Exception\RequestException
      * @expectedExceptionCode    400

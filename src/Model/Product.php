@@ -61,8 +61,8 @@ class Product implements \JsonSerializable
             'title'       => $this->title,
             'description' => $this->description,
             'language'    => $this->language,
-            'price'       => $this->price->getAmount(),
-            'currency'    => $this->price->getCurrency(),
+            'price'       => $this->price ? $this->price->getAmount() : null,
+            'currency'    => $this->price ? $this->price->getCurrency() : null,
             'count'       => $this->count,
             'stock'       => $this->stock,
         ];
