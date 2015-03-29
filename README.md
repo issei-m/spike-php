@@ -26,7 +26,7 @@ To create a new charge, you have to build a `ChargeRequest` object. It can be sp
 ```php
 $request = new \Issei\Spike\ChargeRequest();
 $request
-    ->setCard('tok_xxxxxxxxxxxxxxxxxxxxxxxx')
+    ->setCard(new \Issei\Spike\Model\Token('tok_xxxxxxxxxxxxxxxxxxxxxxxx'))
     ->setAmount(123.45, 'USD') // float
 ;
 
@@ -39,20 +39,20 @@ $product = new \Issei\Spike\Model\Product('my-product-00001'))
     ->setStock(97)
 ;
 
-$request->addProduct($product); // The product can be added many times.
+$request->addProduct($product); // The product can be added any times.
 
-/** @var $createdCharge \Spike\Model\Charge */
+/** @var $createdCharge \Issei\Spike\Model\Charge */
 $createdCharge = $spike->charge($request);
 ```
 
-**NOTE**: A `card token` cannot be retrieved from REST api, you have to retrieve it by [SPIKE Checkout] before using this interface.
+**NOTE**: If you want to know how to get a `card token`, read [Request a token](#request-a-token) section.
 
 ### Find a charge
 
 Call `getCharge()` method with charge id:
 
 ```php
-/** @var $charge \Spike\Model\Charge */
+/** @var $charge \Issei\Spike\Model\Charge */
 $charge = $spike->getCharge('20150101-100000-xxxxxxxxxx');
 ```
 
@@ -61,14 +61,14 @@ $charge = $spike->getCharge('20150101-100000-xxxxxxxxxx');
 Call `refund()` method with the `Charge` object that you want to refund:
 
 ```php
-/** @var $charge \Spike\Model\Charge */
+/** @var $charge \Issei\Spike\Model\Charge */
 $refundedCharge = $spike->refund($charge);
 ```
 
 Tips: Refund needs only `Charge`'s id, so you can also use an initialized one by the id manually:
 
 ```php
-$charge = new \Spike\Model\Charge('20150101-100000-xxxxxxxxxx');
+$charge = new \Issei\Spike\Model\Charge('20150101-100000-xxxxxxxxxx');
 $refundedCharge = $spike->refund($charge);
 ```
 
@@ -77,7 +77,7 @@ $refundedCharge = $spike->refund($charge);
 Call `getCharges()` method. it returns an array containing the `Charge` objects.
 
 ```php
-/** @var $charges \Spike\Model\Charge[] */
+/** @var $charges \Issei\Spike\Model\Charge[] */
 $charges = $spike->getCharges();
 ```
 
@@ -89,16 +89,43 @@ You can specify the limit of number of records at 1st argument (10 records by de
 $charges = $spike->getCharges(5);
 ```
 
-If you pass a `Charge` object into 2nd argument, you can retrieve charges that older than that (passed charge is NOT included to list):
+If you pass a `Charge` object into 2nd argument, you can retrieve charges that older than (passed charge is NOT included to list):
 
 ```php
 $nextCharges = $spike->getCharges(5, $charges[count($charges) - 1]);
 ```
 
-At 3rd argument, you can also specify the charge object if you want to retrieve charges that newer than that (passed charge is NOT included to list):
+At 3rd argument, you can also specify the charge object if you want to retrieve charges that newer than (passed charge is NOT included to list):
 
 ```php
 $nextCharges = $spike->getCharges(5, $charges[count($charges) - 1], ...);
+```
+
+### Request a token
+
+If you have contracted with https://spike.cc to request a new token, you can get a new token by `getToken()` method with `TokenRequest`:
+
+```php
+$request = new \Issei\Spike\TokenRequest();
+$request
+    ->setCardNumber('4444333322221111')
+    ->setExpirationMonth(12)
+    ->setExpirationYear(19)
+    ->setHolderName('Taro Spike')
+    ->setSecurityCode('123')
+    ->setCurrency('JPY')
+    ->setEmail('test@example.jp')
+;
+
+/** @var $charge \Issei\Spike\Model\Token */
+$token = $spike->getToken($request);
+```
+
+You can create a new charge with the retrieved token:
+
+```php
+/** @var $charge \Issei\Spike\Model\Charge */
+$charge = $spike->charge($token); 
 ```
 
 Installation
