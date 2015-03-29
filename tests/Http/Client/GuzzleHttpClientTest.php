@@ -118,7 +118,7 @@ class GuzzleHttpClientTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException        \Issei\Spike\Exception
+     * @expectedException        \Issei\Spike\Exception\Exception
      * @expectedExceptionMessage error_message
      */
     public function it_should_throw_Exception_if_guzzle_throws_RequestException()

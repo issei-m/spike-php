@@ -98,7 +98,7 @@ class CurlClientTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider      invalidUrlProvider
-     * @expectedException \Issei\Spike\Exception
+     * @expectedException \Issei\Spike\Exception\Exception
      */
     public function testRequestWithInvalidUrl($url)
     {

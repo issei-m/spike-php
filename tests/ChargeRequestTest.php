@@ -8,14 +8,6 @@ use Issei\Spike\Model\Product;
 
 class ChargeRequestTest extends \PHPUnit_Framework_TestCase
 {
-    public function testCardAccessors()
-    {
-        $request = new ChargeRequest();
-
-        $request->setCard('_card_');
-        $this->assertEquals('_card_', $request->getCard());
-    }
-
     public function testAmountAccessors()
     {
         $request = new ChargeRequest();

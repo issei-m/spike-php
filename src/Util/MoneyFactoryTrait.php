@@ -1,6 +1,6 @@
 <?php
 
-namespace Issei\Spike;
+namespace Issei\Spike\Util;
 
 use Issei\Spike\Model\Money;
 

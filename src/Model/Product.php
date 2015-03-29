@@ -2,7 +2,7 @@
 
 namespace Issei\Spike\Model;
 
-use Issei\Spike\MoneyFactoryTrait;
+use Issei\Spike\Util\MoneyFactoryTrait;
 
 /**
  * @author Issei Murasawa <issei.m7@gmail.com>

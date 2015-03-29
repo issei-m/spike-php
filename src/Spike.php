@@ -2,12 +2,13 @@
 
 namespace Issei\Spike;
 
+use Issei\Spike\Converter\ObjectConverterInterface;
+use Issei\Spike\Converter\RecursiveObjectFactoryConverterBuilder;
 use Issei\Spike\Exception\RequestException;
 use Issei\Spike\Model\Charge;
-use Issei\Spike\Model\Factory\ChargeFactory;
-use Issei\Spike\Model\Factory\RefundFactory;
 use Issei\Spike\Http\Client\CurlClient;
 use Issei\Spike\Http\ClientInterface;
+use Issei\Spike\Model\Token;
 
 /**
  * The entry point.
@@ -29,15 +30,15 @@ class Spike
     private $httpClient;
 
     /**
-     * @var ChargeFactory
+     * @var ObjectConverterInterface
      */
-    private $chargeFactory;
+    private $objectConverter;
 
-    public function __construct($secret, ClientInterface $httpClient = null, ChargeFactory $chargeFactory = null)
+    public function __construct($secret, ClientInterface $httpClient = null, ObjectConverterInterface $objectConverter = null)
     {
-        $this->secret        = $secret;
-        $this->chargeFactory = $chargeFactory ?: new ChargeFactory(new RefundFactory());
-        $this->httpClient    = $httpClient ?: new CurlClient();
+        $this->secret          = $secret;
+        $this->httpClient      = $httpClient ?: new CurlClient();
+        $this->objectConverter = $objectConverter ?: static::getDefaultObjectConverterBuilder()->getBuilder();
     }
 
     /**
@@ -63,7 +64,7 @@ class Spike
 
         $result = $this->request('GET', $endpointUrl);
 
-        return array_map([$this->chargeFactory, 'create'], $result['data']);
+        return array_map([$this->objectConverter, 'convert'], $result['data']);
     }
 
     /**
@@ -78,7 +79,30 @@ class Spike
     {
         $result = $this->request('GET', '/charges/' . $id);
 
-        return $this->chargeFactory->create($result);
+        return $this->objectConverter->convert($result);
+    }
+
+    /**
+     * Returns a new token.
+     *
+     * @param  TokenRequest $request
+     * @return Token
+     *
+     * @throws RequestException
+     */
+    public function getToken(TokenRequest $request)
+    {
+        $result = $this->request('POST', '/tokens', [
+            'card[number]'    => $request->getCardNumber(),
+            'card[exp_month]' => $request->getExpirationMonth(),
+            'card[exp_year]'  => $request->getExpirationYear(),
+            'card[cvc]'       => $request->getSecurityCode(),
+            'card[name]'      => $request->getHolderName(),
+            'currency'        => $request->getCurrency(),
+            'email'           => $request->getEmail(),
+        ]);
+
+        return $this->objectConverter->convert($result);
     }
 
     /**
@@ -92,13 +116,13 @@ class Spike
     public function charge(ChargeRequest $request)
     {
         $result = $this->request('POST', '/charges', [
-            'card'     => $request->getCard(),
+            'card'     => $request->getCard() ? $request->getCard()->getId() : null,
             'amount'   => $request->getAmount() ? $request->getAmount()->getAmount() : null,
             'currency' => $request->getAmount() ? $request->getAmount()->getCurrency() : null,
             'products' => json_encode($request->getProducts()),
         ]);
 
-        return $this->chargeFactory->create($result);
+        return $this->objectConverter->convert($result);
     }
 
     /**
@@ -113,7 +137,7 @@ class Spike
     {
         $result = $this->request('POST', '/charges/' . $charge->getId() . '/refund');
 
-        return $this->chargeFactory->create($result);
+        return $this->objectConverter->convert($result);
     }
 
     private function request($method, $endpoint, array $params = [])
@@ -127,5 +151,15 @@ class Spike
         }
 
         return $result;
+    }
+
+    /**
+     * Returns the default object converter builder.
+     *
+     * @return RecursiveObjectFactoryConverterBuilder
+     */
+    public static function getDefaultObjectConverterBuilder()
+    {
+        return new RecursiveObjectFactoryConverterBuilder();
     }
 }

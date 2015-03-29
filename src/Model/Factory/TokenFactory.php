@@ -2,15 +2,14 @@
 
 namespace Issei\Spike\Model\Factory;
 
-use Issei\Spike\Model\Money;
-use Issei\Spike\Model\Refund;
+use Issei\Spike\Model\Token;
 
 /**
- * Creates a new refund object.
+ * Creates a new token object.
  *
  * @author Issei Murasawa <issei.m7@gmail.com>
  */
-class RefundFactory implements ObjectFactoryInterface
+class TokenFactory implements ObjectFactoryInterface
 {
     use DateTimeUtilAwareTrait;
 
@@ -19,7 +18,7 @@ class RefundFactory implements ObjectFactoryInterface
      */
     public function getName()
     {
-        return 'refund';
+        return 'token';
     }
 
     /**
@@ -27,12 +26,12 @@ class RefundFactory implements ObjectFactoryInterface
      */
     public function create(array $data)
     {
-        $refund = new Refund();
-        $refund
+        $token = new Token($data['id']);
+        $token
             ->setCreated($this->dateTimeUtil->createDateTimeByUnixTime($data['created']))
-            ->setAmount(new Money(floatval($data['amount']), $data['currency']))
+            ->setSource($data['source'])
         ;
 
-        return $refund;
+        return $token;
     }
 }

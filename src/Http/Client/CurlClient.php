@@ -2,7 +2,7 @@
 
 namespace Issei\Spike\Http\Client;
 
-use Issei\Spike\Exception;
+use Issei\Spike\Exception\Exception;
 use Issei\Spike\Http\ClientInterface;
 use Issei\Spike\Http\Response;
 

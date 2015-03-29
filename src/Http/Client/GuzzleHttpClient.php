@@ -6,7 +6,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface as GuzzleHttpClientInterface;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\RequestException;
-use Issei\Spike\Exception;
+use Issei\Spike\Exception\Exception;
 use Issei\Spike\Http\ClientInterface;
 use Issei\Spike\Http\Response;
 

@@ -5,12 +5,30 @@ require __DIR__ . '/definition.php';
 
 $spike = new \Issei\Spike\Spike(API_SECRET);
 
-echo '<h1>New Charge</h1>';
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+echo '<h1>Retrieve the token</h1>';
+
+$req = new \Issei\Spike\TokenRequest();
+$req
+    ->setCardNumber('4444333322221111')
+    ->setExpirationMonth(12)
+    ->setExpirationYear(19)
+    ->setHolderName('Taro Spike')
+    ->setSecurityCode('123')
+    ->setCurrency('JPY')
+    ->setEmail('test@example.jp')
+;
+dump($token = $spike->getToken($req));
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+echo '<h1>New charge</h1>';
 
 $req = new \Issei\Spike\ChargeRequest();
 $req
     ->setAmount(100, 'JPY')
-    ->setCard(CARD_TOKEN)
+    ->setCard($token)
     ->addProduct(
         (new \Issei\Spike\Model\Product(uniqid('product-', true)))
             ->setTitle('Title')
@@ -22,6 +40,14 @@ $req
 ;
 dump($spike->charge($req));
 
-echo '<h1>Retrieve Charges</h1>';
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-dump($spike->getCharges(5));
+echo '<h1>Retrieve charges</h1>';
+
+dump($charges = $spike->getCharges(5));
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+echo '<h1>Refund the charge</h1>';
+
+dump($spike->refund($charges[0]));

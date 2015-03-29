@@ -6,45 +6,39 @@ use Issei\Spike\Model\Charge;
 use Issei\Spike\Model\Money;
 
 /**
- * Creates a new charge object with json that retrieved from api.
+ * Creates a new charge object.
  *
  * @author Issei Murasawa <issei.m7@gmail.com>
  */
-class ChargeFactory
+class ChargeFactory implements ObjectFactoryInterface
 {
-    use TimeZoneSpecifiableTrait;
+    use DateTimeUtilAwareTrait;
 
     /**
-     * @var RefundFactory
+     * {@inheritdoc}
      */
-    private $refundFactory;
-
-    public function __construct(RefundFactory $refundFactory, \DateTimeZone $specifiedTimeZone = null)
+    public function getName()
     {
-        $this->refundFactory     = $refundFactory;
-        $this->specifiedTimeZone = $specifiedTimeZone ?: new \DateTimeZone(date_default_timezone_get());
+        return 'charge';
     }
 
     /**
-     * Returns a created charge object.
-     *
-     * @param  array $json
-     * @return Charge
+     * {@inheritdoc}
      */
-    public function create(array $json)
+    public function create(array $data)
     {
-        $charge = new Charge($json['id']);
+        $charge = new Charge($data['id']);
         $charge
-            ->setCreated($this->createDateTimeByUnixTime($json['created']))
-            ->setPaid($json['paid'])
-            ->setCaptured($json['captured'])
-            ->setAmount(new Money(floatval($json['amount']), $json['currency']))
-            ->setRefunded($json['refunded'])
-            ->setAmountRefunded(new Money(floatval($json['amount_refunded']), $json['currency']))
+            ->setCreated($this->dateTimeUtil->createDateTimeByUnixTime($data['created']))
+            ->setPaid($data['paid'])
+            ->setCaptured($data['captured'])
+            ->setAmount(new Money(floatval($data['amount']), $data['currency']))
+            ->setRefunded($data['refunded'])
+            ->setAmountRefunded(new Money(floatval($data['amount_refunded']), $data['currency']))
         ;
 
-        foreach ($json['refunds'] as $refundJson) {
-            $charge->addRefund($this->refundFactory->create($refundJson));
+        foreach ($data['refunds'] as $refund) {
+            $charge->addRefund($refund);
         }
 
         return $charge;

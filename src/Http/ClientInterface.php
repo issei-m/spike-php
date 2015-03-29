@@ -2,7 +2,7 @@
 
 namespace Issei\Spike\Http;
 
-use Issei\Spike\Exception;
+use Issei\Spike\Exception\Exception;
 
 /**
  * Handles the api via HTTP.

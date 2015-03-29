@@ -8,7 +8,9 @@ use Issei\Spike\Http\Response;
 use Issei\Spike\Model\Charge;
 use Issei\Spike\Model\Money;
 use Issei\Spike\Model\Product;
+use Issei\Spike\Model\Token;
 use Issei\Spike\Spike;
+use Issei\Spike\TokenRequest;
 
 class SpikeTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,7 +24,7 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $chargeFactory;
+    private $objectConverter;
 
     /**
      * @var Spike
@@ -31,20 +33,20 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->httpClient    = $this->getMock('Issei\Spike\Http\ClientInterface');
-        $this->chargeFactory = $this->getMockBuilder('Issei\Spike\Model\Factory\ChargeFactory')->disableOriginalConstructor()->getMock();
+        $this->httpClient      = $this->getMock('Issei\Spike\Http\ClientInterface');
+        $this->objectConverter = $this->getMock('Issei\Spike\Converter\ObjectConverterInterface');
 
-        $this->SUT = new Spike(self::SECRET, $this->httpClient, $this->chargeFactory);
+        $this->SUT = new Spike(self::SECRET, $this->httpClient, $this->objectConverter);
     }
 
     /**
      * @return ChargeRequest
      */
-    private function createCharge()
+    private function createChargeRequest()
     {
         $request = new ChargeRequest();
         $request
-            ->setCard('_card_')
+            ->setCard(new Token('_card_'))
             ->setAmount(new Money(1000, 'JPY'))
             ->addProduct(
                 (new Product('product-a'))
@@ -87,8 +89,8 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
 
         $chargeA = new Charge('charge-a');
         $chargeB = new Charge('charge-b');
-        $this->chargeFactory->expects($this->at(0))->method('create')->with(['charge-a-data'])->will($this->returnValue($chargeA));
-        $this->chargeFactory->expects($this->at(1))->method('create')->with(['charge-b-data'])->will($this->returnValue($chargeB));
+        $this->objectConverter->expects($this->at(0))->method('convert')->with(['charge-a-data'])->will($this->returnValue($chargeA));
+        $this->objectConverter->expects($this->at(1))->method('convert')->with(['charge-b-data'])->will($this->returnValue($chargeB));
 
         $this->assertSame([$chargeA, $chargeB], $this->SUT->getCharges(3));
     }
@@ -109,7 +111,7 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
         ;
 
         $charge = new Charge('charge-b');
-        $this->chargeFactory->expects($this->once())->method('create')->with(['charge-b-data'])->will($this->returnValue($charge));
+        $this->objectConverter->expects($this->once())->method('convert')->with(['charge-b-data'])->will($this->returnValue($charge));
 
         $this->assertSame([$charge], $this->SUT->getCharges(5, new Charge('charge-a'), new Charge('charge-c')));
     }
@@ -138,7 +140,7 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
         ;
 
         $charge = new Charge('123');
-        $this->chargeFactory->expects($this->once())->method('create')->with(['charge'])->will($this->returnValue($charge));
+        $this->objectConverter->expects($this->once())->method('convert')->with(['charge'])->will($this->returnValue($charge));
 
         $this->assertSame($charge, $this->SUT->getCharge('123'));
     }
@@ -162,24 +164,58 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    public function testGetToken()
+    {
+        $request = new TokenRequest();
+        $request
+            ->setCardNumber('4444333322221111')
+            ->setExpirationMonth(12)
+            ->setExpirationYear(19)
+            ->setHolderName('Taro Spike')
+            ->setSecurityCode(123)
+            ->setCurrency('JPY')
+            ->setEmail('test@example.jp')
+        ;
+
+        $this->httpClient
+            ->expects($this->once())
+            ->method('request')
+            ->with('POST', Spike::ENDPOINT_PREFIX . '/tokens', self::SECRET, [
+                'card[number]'    => $request->getCardNumber(),
+                'card[exp_month]' => $request->getExpirationMonth(),
+                'card[exp_year]'  => $request->getExpirationYear(),
+                'card[cvc]'       => $request->getSecurityCode(),
+                'card[name]'      => $request->getHolderName(),
+                'currency'        => $request->getCurrency(),
+                'email'           => $request->getEmail(),
+            ])
+            ->will($this->returnValue(new Response(200, json_encode(['token-data']))))
+        ;
+
+        $token = new Charge('token');
+        $this->objectConverter->expects($this->once())->method('convert')->with(['token-data'])->willReturn($token);
+
+        $this->assertSame($token, $this->SUT->getToken($request));
+    }
+
     public function testCharge()
     {
-        $request = $this->createCharge();
+        $request = $this->createChargeRequest();
 
         $this->httpClient
             ->expects($this->once())
             ->method('request')
             ->with('POST', Spike::ENDPOINT_PREFIX . '/charges', self::SECRET, [
-                'card'     => $request->getCard(),
+                'card'     => $request->getCard()->getId(),
                 'amount'   => $request->getAmount()->getAmount(),
                 'currency' => $request->getAmount()->getCurrency(),
                 'products' => json_encode($request->getProducts()),
             ])
-            ->will($this->returnValue(new Response(200, json_encode(['charge-c-data']))))
+            ->will($this->returnValue(new Response(200, json_encode(['charge-data']))))
         ;
 
-        $charge = new Charge('charge-c');
-        $this->chargeFactory->expects($this->once())->method('create')->with(['charge-c-data'])->will($this->returnValue($charge));
+        $charge = new Charge('charge');
+        $this->objectConverter->expects($this->once())->method('convert')->with(['charge-data'])->willReturn($charge);
 
         $this->assertSame($charge, $this->SUT->charge($request));
     }
@@ -204,7 +240,7 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
         ;
 
         $charge = new Charge('charge');
-        $this->chargeFactory->expects($this->once())->method('create')->with(['charge-data'])->willReturn($charge);
+        $this->objectConverter->expects($this->once())->method('convert')->with(['charge-data'])->willReturn($charge);
 
         $this->assertSame($charge, $this->SUT->charge($request));
     }
@@ -221,7 +257,7 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
         $this->expect_that_httpClient_returns_response_which_is_appealing_there_is_error();
 
         try {
-            $this->SUT->charge($this->createCharge());
+            $this->SUT->charge($this->createChargeRequest());
         } catch (RequestException $e) {
             $this->assertEquals('_error_type_', $e->getType());
             throw $e;
@@ -238,7 +274,7 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
         ;
 
         $charge = new Charge('charge-a');
-        $this->chargeFactory->expects($this->once())->method('create')->with(['charge-a-data'])->will($this->returnValue($charge));
+        $this->objectConverter->expects($this->once())->method('convert')->with(['charge-a-data'])->will($this->returnValue($charge));
 
         $this->assertSame($charge, $this->SUT->refund(new Charge('charge-a')));
     }
@@ -276,5 +312,10 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
             ->method('request')
             ->will($this->returnValue($response))
         ;
+    }
+
+    public function test()
+    {
+        $this->assertInstanceOf('Issei\Spike\Converter\RecursiveObjectFactoryConverterBuilder', $this->SUT->getDefaultObjectConverterBuilder());
     }
 }

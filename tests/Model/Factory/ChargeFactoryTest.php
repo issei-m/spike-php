@@ -11,7 +11,7 @@ class ChargeFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $refundFactory;
+    private $dateTimeUtil;
 
     /**
      * @var ChargeFactory
@@ -20,18 +20,20 @@ class ChargeFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        date_default_timezone_set('Asia/Tokyo');
+        $this->dateTimeUtil = $this->getMockBuilder('Issei\Spike\Util\DateTimeUtil')->disableOriginalConstructor()->getMock();
+        $this->SUT = new ChargeFactory($this->dateTimeUtil);
+    }
 
-        $this->refundFactory = $this->getMockBuilder('Issei\Spike\Model\Factory\RefundFactory')->disableOriginalConstructor()->getMock();
-        $this->SUT = new ChargeFactory($this->refundFactory);
+    public function testGetName()
+    {
+        $this->assertEquals('charge', $this->SUT->getName());
     }
 
     public function testCreate()
     {
-        $created = new \DateTime('2015/01/01 10:00:00', new \DateTimeZone('UTC'));
-        $json = [
+        $data = [
             'id'              => 'charge-id',
-            'created'         => $created->getTimestamp(),
+            'created'         => 123,
             'paid'            => true,
             'captured'        => true,
             'amount'          => '5000.0',
@@ -39,52 +41,25 @@ class ChargeFactoryTest extends \PHPUnit_Framework_TestCase
             'refunded'        => true,
             'amount_refunded' => '5000.0',
             'refunds'         => [
-                ['refund-a-data'],
-                ['refund-b-data'],
+                new Refund(),
+                new Refund(),
             ],
         ];
 
-        $refundA = new Refund();
-        $refundB = new Refund();
-        $this->refundFactory->expects($this->at(0))->method('create')->with(['refund-a-data'])->will($this->returnValue($refundA));
-        $this->refundFactory->expects($this->at(1))->method('create')->with(['refund-b-data'])->will($this->returnValue($refundB));
+        $dateTime = new \DateTime('2015/01/01 10:00:00', new \DateTimeZone('UTC'));
+        $this->dateTimeUtil->expects($this->once())->method('createDateTimeByUnixTime')->with(123)->will($this->returnValue($dateTime));
 
-        $charge = $this->SUT->create($json);
+        $charge = $this->SUT->create($data);
         $this->assertInstanceOf('Issei\Spike\Model\Charge', $charge);
         $this->assertEquals('charge-id', $charge->getId());
-        $this->assertEquals($created, $charge->getCreated());
-        $this->assertEquals('+0900', $charge->getCreated()->format('O'), 'default timezone is used by default');
+        $this->assertSame($dateTime, $charge->getCreated());
         $this->assertEquals(new Money(5000.0, 'JPY'), $charge->getAmount());
         $this->assertTrue($charge->isPaid());
         $this->assertTrue($charge->isCaptured());
         $this->assertTrue($charge->isRefunded());
         $this->assertEquals(new Money(5000.0, 'JPY'), $charge->getAmountRefunded());
         $this->assertCount(2, $charge->getRefunds());
-        $this->assertSame($refundA, $charge->getRefunds()[0]);
-        $this->assertSame($refundB, $charge->getRefunds()[1]);
-    }
-
-    /**
-     * @test
-     */
-    public function it_should_be_timezone_specifiable_for_created()
-    {
-        $this->SUT = new ChargeFactory($this->refundFactory, new \DateTimeZone('Asia/Singapore'));
-
-        $created = new \DateTime('2015/01/01 10:00:00', new \DateTimeZone('UTC'));
-        $json = [
-            'id'              => 'charge-identifier',
-            'created'         => $created->getTimestamp(),
-            'paid'            => true,
-            'captured'        => true,
-            'amount'          => '5000.0',
-            'currency'        => 'JPY',
-            'refunded'        => true,
-            'amount_refunded' => '5000.0',
-            'refunds'         => []
-        ];
-
-        $refund = $this->SUT->create($json);
-        $this->assertEquals('+0800', $refund->getCreated()->format('O'));
+        $this->assertSame($data['refunds'][0], $charge->getRefunds()[0]);
+        $this->assertSame($data['refunds'][1], $charge->getRefunds()[1]);
     }
 }

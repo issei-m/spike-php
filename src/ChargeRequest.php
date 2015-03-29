@@ -4,6 +4,8 @@ namespace Issei\Spike;
 
 use Issei\Spike\Model\Money;
 use Issei\Spike\Model\Product;
+use Issei\Spike\Model\Token;
+use Issei\Spike\Util\MoneyFactoryTrait;
 
 /**
  * The request context for creating a new charge.
@@ -20,7 +22,7 @@ class ChargeRequest
     private $amount;
 
     /**
-     * @var string
+     * @var Token
      */
     private $card;
 
@@ -50,7 +52,7 @@ class ChargeRequest
     }
 
     /**
-     * @return string
+     * @return Token
      */
     public function getCard()
     {
@@ -58,10 +60,10 @@ class ChargeRequest
     }
 
     /**
-     * @param  string $card
+     * @param  Token $card
      * @return self
      */
-    public function setCard($card)
+    public function setCard(Token $card)
     {
         $this->card = $card;
 

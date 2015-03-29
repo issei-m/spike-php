@@ -2,8 +2,6 @@
 
 namespace Issei\Spike\Exception;
 
-use Issei\Spike\Exception;
-
 /**
  * Indicates error occurred at api (e.g. Authentication failed, Bad request, etc).
  *

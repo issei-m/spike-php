@@ -1,6 +1,6 @@
 <?php
 
-namespace Issei\Spike;
+namespace Issei\Spike\Exception;
 
 /**
  * @author Issei Murasawa <issei.m7@gmail.com>
