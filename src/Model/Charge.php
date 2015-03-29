@@ -56,6 +56,11 @@ class Charge
         $this->id = $id;
     }
 
+    public function __toString()
+    {
+        return $this->id;
+    }
+
     /**
      * @return string
      */

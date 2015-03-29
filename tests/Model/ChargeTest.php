@@ -8,6 +8,12 @@ use Issei\Spike\Model\Refund;
 
 class ChargeTest extends \PHPUnit_Framework_TestCase
 {
+    public function testToString()
+    {
+        $token = new Charge('_charge_');
+        $this->assertEquals('_charge_', $token);
+    }
+
     public function testAccessors()
     {
         $charge = new Charge('charge');

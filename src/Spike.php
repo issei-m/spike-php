@@ -56,10 +56,10 @@ class Spike
         $endpointUrl = '/charges?limit=' . $limit;
 
         if ($startingAfter instanceof Charge) {
-            $endpointUrl .= '&starting_after=' . $startingAfter->getId();
+            $endpointUrl .= '&starting_after=' . $startingAfter;
         }
         if ($endingBefore instanceof Charge) {
-            $endpointUrl .= '&ending_before=' . $endingBefore->getId();
+            $endpointUrl .= '&ending_before=' . $endingBefore;
         }
 
         $result = $this->request('GET', $endpointUrl);
@@ -116,7 +116,7 @@ class Spike
     public function charge(ChargeRequest $request)
     {
         $result = $this->request('POST', '/charges', [
-            'card'     => $request->getCard() ? $request->getCard()->getId() : null,
+            'card'     => $request->getCard(),
             'amount'   => $request->getAmount() ? $request->getAmount()->getAmount() : null,
             'currency' => $request->getAmount() ? $request->getAmount()->getCurrency() : null,
             'products' => json_encode($request->getProducts()),
@@ -135,7 +135,7 @@ class Spike
      */
     public function refund(Charge $charge)
     {
-        $result = $this->request('POST', '/charges/' . $charge->getId() . '/refund');
+        $result = $this->request('POST', '/charges/' . $charge . '/refund');
 
         return $this->objectConverter->convert($result);
     }
