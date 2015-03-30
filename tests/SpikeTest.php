@@ -7,6 +7,7 @@ use Issei\Spike\Exception\RequestException;
 use Issei\Spike\Http\Response;
 use Issei\Spike\Model\Charge;
 use Issei\Spike\Model\Money;
+use Issei\Spike\Model\ObjectList;
 use Issei\Spike\Model\Product;
 use Issei\Spike\Model\Token;
 use Issei\Spike\Spike;
@@ -78,6 +79,7 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
                 ['charge-a-data'],
                 ['charge-b-data'],
             ],
+            'has_more' => true,
         ]));
 
         $this->httpClient
@@ -87,12 +89,22 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($response))
         ;
 
-        $chargeA = new Charge('charge-a');
-        $chargeB = new Charge('charge-b');
-        $this->objectConverter->expects($this->at(0))->method('convert')->with(['charge-a-data'])->will($this->returnValue($chargeA));
-        $this->objectConverter->expects($this->at(1))->method('convert')->with(['charge-b-data'])->will($this->returnValue($chargeB));
+        $charges = new ObjectList([new Charge('charge-a'), new Charge('charge-b')], true);
 
-        $this->assertSame([$chargeA, $chargeB], $this->SUT->getCharges(3));
+        $this->objectConverter
+            ->expects($this->once())
+            ->method('convert')
+            ->with([
+                'data' => [
+                    ['charge-a-data'],
+                    ['charge-b-data'],
+                ],
+                'has_more' => true,
+            ])
+            ->willReturn($charges)
+        ;
+
+        $this->assertSame($charges, $this->SUT->getCharges(3));
     }
 
     public function testGetChargesWithStartingAfterAndEndingBefore()
@@ -101,6 +113,7 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
             'data' => [
                 ['charge-b-data'],
             ],
+            'has_more' => true,
         ]));
 
         $this->httpClient
@@ -110,11 +123,20 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($response))
         ;
 
-        $charge = new Charge('charge-b');
-        $this->objectConverter->expects($this->any())->method('convert')->with(['charge-b-data'])->will($this->returnValue($charge));
+        $charges = new ObjectList([new Charge('charge-b')], true);
+        $this->objectConverter
+            ->expects($this->any())
+            ->method('convert')->with([
+                'data' => [
+                    ['charge-b-data'],
+                ],
+                'has_more' => true,
+            ])
+            ->willReturn($charges)
+        ;
 
-        $this->assertSame([$charge], $this->SUT->getCharges(5, new Charge('charge-a'), new Charge('charge-c')));
-        $this->assertSame([$charge], $this->SUT->getCharges(5, 'charge-a', 'charge-c'), '$startingAfter and $endingBefore are allowed to be a string.');
+        $this->assertSame($charges, $this->SUT->getCharges(5, new Charge('charge-a'), new Charge('charge-c')));
+        $this->assertSame($charges, $this->SUT->getCharges(5, 'charge-a', 'charge-c'), '$startingAfter and $endingBefore are allowed to be a string.');
     }
 
     /**

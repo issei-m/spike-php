@@ -4,6 +4,7 @@ namespace Issei\Spike\Converter;
 
 use Issei\Spike\Model\Factory\ChargeFactory;
 use Issei\Spike\Model\Factory\CardFactory;
+use Issei\Spike\Model\Factory\ObjectListFactory;
 use Issei\Spike\Model\Factory\RefundFactory;
 use Issei\Spike\Model\Factory\TokenFactory;
 use Issei\Spike\Util\DateTimeUtil;
@@ -39,6 +40,7 @@ final class RecursiveObjectFactoryConverterBuilder
             new RefundFactory($dateTimeUtil),
             new TokenFactory($dateTimeUtil),
             new CardFactory(),
+            new ObjectListFactory(),
         ]);
     }
 }

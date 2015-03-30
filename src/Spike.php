@@ -64,7 +64,7 @@ class Spike
 
         $result = $this->request('GET', $endpointUrl);
 
-        return array_map([$this->objectConverter, 'convert'], $result['data']);
+        return $this->objectConverter->convert($result);
     }
 
     /**
