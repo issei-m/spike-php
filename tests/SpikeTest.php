@@ -104,16 +104,17 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
         ]));
 
         $this->httpClient
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('request')
             ->with('GET', Spike::ENDPOINT_PREFIX . '/charges?limit=5&starting_after=charge-a&ending_before=charge-c', self::SECRET, [])
             ->will($this->returnValue($response))
         ;
 
         $charge = new Charge('charge-b');
-        $this->objectConverter->expects($this->once())->method('convert')->with(['charge-b-data'])->will($this->returnValue($charge));
+        $this->objectConverter->expects($this->any())->method('convert')->with(['charge-b-data'])->will($this->returnValue($charge));
 
         $this->assertSame([$charge], $this->SUT->getCharges(5, new Charge('charge-a'), new Charge('charge-c')));
+        $this->assertSame([$charge], $this->SUT->getCharges(5, 'charge-a', 'charge-c'), '$startingAfter and $endingBefore are allowed to be a string.');
     }
 
     /**
@@ -267,16 +268,17 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
     public function testRefund()
     {
         $this->httpClient
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('request')
             ->with('POST', Spike::ENDPOINT_PREFIX . '/charges/charge-a/refund', self::SECRET, [])
             ->will($this->returnValue(new Response(200, json_encode(['charge-a-data']))))
         ;
 
         $charge = new Charge('charge-a');
-        $this->objectConverter->expects($this->once())->method('convert')->with(['charge-a-data'])->will($this->returnValue($charge));
+        $this->objectConverter->expects($this->any())->method('convert')->with(['charge-a-data'])->will($this->returnValue($charge));
 
         $this->assertSame($charge, $this->SUT->refund(new Charge('charge-a')));
+        $this->assertSame($charge, $this->SUT->refund('charge-a'), '$charge is allowed to be a string.');
     }
 
     /**

@@ -44,21 +44,21 @@ class Spike
     /**
      * Returns the charges.
      *
-     * @param  integer $limit
-     * @param  Charge  $startingAfter
-     * @param  Charge  $endingBefore
+     * @param  integer       $limit
+     * @param  Charge|string $startingAfter
+     * @param  Charge|string $endingBefore
      * @return Charge[]
      *
      * @throws RequestException
      */
-    public function getCharges($limit = 10, Charge $startingAfter = null, Charge $endingBefore = null)
+    public function getCharges($limit = 10, $startingAfter = null, $endingBefore = null)
     {
         $endpointUrl = '/charges?limit=' . $limit;
 
-        if ($startingAfter instanceof Charge) {
+        if ($startingAfter) {
             $endpointUrl .= '&starting_after=' . $startingAfter;
         }
-        if ($endingBefore instanceof Charge) {
+        if ($endingBefore) {
             $endpointUrl .= '&ending_before=' . $endingBefore;
         }
 
@@ -128,12 +128,12 @@ class Spike
     /**
      * Refunds the charge.
      *
-     * @param  Charge $charge
+     * @param  Charge|string $charge
      * @return Charge
      *
      * @throws RequestException
      */
-    public function refund(Charge $charge)
+    public function refund($charge)
     {
         $result = $this->request('POST', '/charges/' . $charge . '/refund');
 
