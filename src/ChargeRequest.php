@@ -60,11 +60,17 @@ class ChargeRequest
     }
 
     /**
-     * @param  Token $card
+     * @param  Token|string $card
      * @return self
      */
-    public function setCard(Token $card)
+    public function setCard($card)
     {
+        if (is_string($card)) {
+            $card = new Token($card);
+        } elseif (!$card instanceof Token) {
+            throw new \InvalidArgumentException('$card must be an instance of Issei\Spike\Model\Token or a string.');
+        }
+
         $this->card = $card;
 
         return $this;
