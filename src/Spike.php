@@ -119,8 +119,24 @@ class Spike
             'card'     => $request->getCard(),
             'amount'   => $request->getAmount() ? $request->getAmount()->getAmount() : null,
             'currency' => $request->getAmount() ? $request->getAmount()->getCurrency() : null,
+            'capture'  => $request->isCapture(),
             'products' => json_encode($request->getProducts()),
         ]);
+
+        return $this->objectConverter->convert($result);
+    }
+
+    /**
+     * Captures the charge.
+     *
+     * @param  Charge|string $charge
+     * @return Charge
+     *
+     * @throws RequestException
+     */
+    public function capture($charge)
+    {
+        $result = $this->request('POST', '/charges/' . $charge . '/capture');
 
         return $this->objectConverter->convert($result);
     }

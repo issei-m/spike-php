@@ -47,14 +47,18 @@ class ChargeRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(new Money(300.50, 'USD'), $request->getAmount());
     }
 
-    public function testProductsAccessors()
+    public function testOtherAccessors()
     {
         $request = new ChargeRequest();
+        $this->assertTrue($request->isCapture());
+        $this->assertSame([], $request->getProducts());
 
         $request
+            ->setCapture(false)
             ->addProduct($productA = new Product('product-a-id'))
             ->addProduct($productB = new Product('product-b-id'))
         ;
+        $this->assertFalse($request->isCapture());
         $this->assertCount(2, $request->getProducts());
         $this->assertSame($productA, $request->getProducts()[0]);
         $this->assertSame($productB, $request->getProducts()[1]);

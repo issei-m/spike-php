@@ -17,39 +17,24 @@ class ChargeRequest
     use MoneyFactoryTrait;
 
     /**
-     * @var Money
-     */
-    private $amount;
-
-    /**
      * @var Token
      */
     private $card;
 
     /**
+     * @var Money
+     */
+    private $amount;
+
+    /**
+     * @var Boolean
+     */
+    private $capture = true;
+
+    /**
      * @var Product[]
      */
     private $products = [];
-
-    /**
-     * @return Money
-     */
-    public function getAmount()
-    {
-        return $this->amount;
-    }
-
-    /**
-     * @param  Money|float $amount
-     * @param  string|null $currency
-     * @return self
-     */
-    public function setAmount($amount, $currency = null)
-    {
-        $this->amount = $this->createMoney($amount, $currency);
-
-        return $this;
-    }
 
     /**
      * @return Token
@@ -72,6 +57,45 @@ class ChargeRequest
         }
 
         $this->card = $card;
+
+        return $this;
+    }
+
+    /**
+     * @return Money
+     */
+    public function getAmount()
+    {
+        return $this->amount;
+    }
+
+    /**
+     * @param  Money|float $amount
+     * @param  string|null $currency
+     * @return self
+     */
+    public function setAmount($amount, $currency = null)
+    {
+        $this->amount = $this->createMoney($amount, $currency);
+
+        return $this;
+    }
+
+    /**
+     * @return Boolean
+     */
+    public function isCapture()
+    {
+        return $this->capture;
+    }
+
+    /**
+     * @param  Boolean $capture
+     * @return self
+     */
+    public function setCapture($capture)
+    {
+        $this->capture = (bool) $capture;
 
         return $this;
     }

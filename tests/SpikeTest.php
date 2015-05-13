@@ -49,6 +49,7 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
         $request
             ->setCard(new Token('_card_'))
             ->setAmount(new Money(1000, 'JPY'))
+            ->setCapture(false)
             ->addProduct(
                 (new Product('product-a'))
                     ->setTitle('Product.A')
@@ -232,6 +233,7 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
                 'card'     => $request->getCard()->getId(),
                 'amount'   => $request->getAmount()->getAmount(),
                 'currency' => $request->getAmount()->getCurrency(),
+                'capture'  => $request->isCapture(),
                 'products' => json_encode($request->getProducts()),
             ])
             ->will($this->returnValue(new Response(200, json_encode(['charge-data']))))
@@ -257,6 +259,7 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
                 'card'     => null,
                 'amount'   => null,
                 'currency' => null,
+                'capture'  => true,
                 'products' => json_encode([]),
             ])
             ->willReturn(new Response(200, json_encode(['charge-data'])))
@@ -281,6 +284,41 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
 
         try {
             $this->SUT->charge($this->createChargeRequest());
+        } catch (RequestException $e) {
+            $this->assertEquals('_error_type_', $e->getType());
+            throw $e;
+        }
+    }
+
+    public function testCapture()
+    {
+        $this->httpClient
+            ->expects($this->any())
+            ->method('request')
+            ->with('POST', Spike::ENDPOINT_PREFIX . '/charges/charge-a/capture', self::SECRET, [])
+            ->will($this->returnValue(new Response(200, json_encode(['charge-a-data']))))
+        ;
+
+        $charge = new Charge('charge-a');
+        $this->objectConverter->expects($this->any())->method('convert')->with(['charge-a-data'])->will($this->returnValue($charge));
+
+        $this->assertSame($charge, $this->SUT->capture(new Charge('charge-a')));
+        $this->assertSame($charge, $this->SUT->capture('charge-a'), '$charge is allowed to be a string.');
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException        \Issei\Spike\Exception\RequestException
+     * @expectedExceptionCode    400
+     * @expectedExceptionMessage _error_message_
+     */
+    public function capture_should_throw_Exception_if_api_returned_error()
+    {
+        $this->expect_that_httpClient_returns_response_which_is_appealing_there_is_error();
+
+        try {
+            $this->SUT->capture(new Charge(''));
         } catch (RequestException $e) {
             $this->assertEquals('_error_type_', $e->getType());
             throw $e;
