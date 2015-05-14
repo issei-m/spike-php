@@ -122,7 +122,7 @@ $nextCharges = $spike->getCharges(5, $charges[count($charges) - 1], ...);
 
 ### Request a token
 
-If you have contracted with https://spike.cc to request a new token, you can get a new token by `getToken()` method with `TokenRequest`:
+If you have contracted with https://spike.cc to request a new token, you can get a new token by `requestToken()` method with `TokenRequest`:
 
 ```php
 $request = new \Issei\Spike\TokenRequest();
@@ -137,7 +137,7 @@ $request
 ;
 
 /** @var $charge \Issei\Spike\Model\Token */
-$token = $spike->getToken($request);
+$token = $spike->requestToken($request);
 ```
 
 Of course, you can create a new charge with it:

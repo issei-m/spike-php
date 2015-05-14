@@ -42,9 +42,47 @@ class Spike
     }
 
     /**
+     * Returns a new token.
+     *
+     * @param  TokenRequest $request
+     * @return Token
+     *
+     * @throws RequestException
+     */
+    public function requestToken(TokenRequest $request)
+    {
+        $result = $this->request('POST', '/tokens', [
+            'card[number]' => $request->getCardNumber(),
+            'card[exp_month]' => $request->getExpirationMonth(),
+            'card[exp_year]' => $request->getExpirationYear(),
+            'card[cvc]' => $request->getSecurityCode(),
+            'card[name]' => $request->getHolderName(),
+            'currency' => $request->getCurrency(),
+            'email' => $request->getEmail(),
+        ]);
+
+        return $this->objectConverter->convert($result);
+    }
+
+    /**
+     * Returns the token by id.
+     *
+     * @param  string $id
+     * @return Token
+     *
+     * @throws RequestException
+     */
+    public function getToken($id)
+    {
+        $result = $this->request('GET', '/tokens/' . $id);
+
+        return $this->objectConverter->convert($result);
+    }
+
+    /**
      * Returns the charges.
      *
-     * @param  integer       $limit
+     * @param  integer $limit
      * @param  Charge|string $startingAfter
      * @param  Charge|string $endingBefore
      * @return Charge[]
@@ -78,29 +116,6 @@ class Spike
     public function getCharge($id)
     {
         $result = $this->request('GET', '/charges/' . $id);
-
-        return $this->objectConverter->convert($result);
-    }
-
-    /**
-     * Returns a new token.
-     *
-     * @param  TokenRequest $request
-     * @return Token
-     *
-     * @throws RequestException
-     */
-    public function getToken(TokenRequest $request)
-    {
-        $result = $this->request('POST', '/tokens', [
-            'card[number]'    => $request->getCardNumber(),
-            'card[exp_month]' => $request->getExpirationMonth(),
-            'card[exp_year]'  => $request->getExpirationYear(),
-            'card[cvc]'       => $request->getSecurityCode(),
-            'card[name]'      => $request->getHolderName(),
-            'currency'        => $request->getCurrency(),
-            'email'           => $request->getEmail(),
-        ]);
 
         return $this->objectConverter->convert($result);
     }
