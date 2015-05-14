@@ -37,6 +37,11 @@ class Charge
     private $amount;
 
     /**
+     * @var Card
+     */
+    private $source;
+
+    /**
      * @var Boolean
      */
     private $refunded;
@@ -50,6 +55,11 @@ class Charge
      * @var array
      */
     private $refunds = [];
+
+    /**
+     * @var Dispute
+     */
+    private $dispute;
 
     public function __construct($id)
     {
@@ -147,6 +157,25 @@ class Charge
     }
 
     /**
+     * @return self
+     */
+    public function getSource()
+    {
+        return $this->source;
+    }
+
+    /**
+     * @param  Card $source
+     * @return self
+     */
+    public function setSource($source)
+    {
+        $this->source = $source;
+
+        return $this;
+    }
+
+    /**
      * @return boolean
      */
     public function isRefunded()
@@ -202,5 +231,24 @@ class Charge
         $this->refunds[] = $refund;
 
         return $this;
+    }
+
+    /**
+     * @param  Dispute $dispute
+     * @return self
+     */
+    public function setDispute($dispute)
+    {
+        $this->dispute = $dispute;
+
+        return $this;
+    }
+
+    /**
+     * @return Dispute
+     */
+    public function getDispute()
+    {
+        return $this->dispute;
     }
 }

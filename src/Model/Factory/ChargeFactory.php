@@ -33,8 +33,10 @@ class ChargeFactory implements ObjectFactoryInterface
             ->setPaid($data['paid'])
             ->setCaptured($data['captured'])
             ->setAmount(new Money(floatval($data['amount']), $data['currency']))
+            ->setSource($data['source'] ?: null)// Ensures type of "source" because spike.cc might return an empty array if has no source.
             ->setRefunded($data['refunded'])
             ->setAmountRefunded(new Money(floatval($data['amount_refunded']), $data['currency']))
+            ->setDispute($data['dispute'])
         ;
 
         foreach ($data['refunds'] as $refund) {
