@@ -30,7 +30,8 @@ $token = new \Issei\Spike\Model\Token('tok_xxxxxxxxxxxxxxxxxxxxxxxx');
 $request = new \Issei\Spike\ChargeRequest();
 $request
     ->setCard($token)
-    ->setAmount(123.45, 'USD') // float
+    ->setAmount(123.45, 'USD')
+    ->setCapture(true) // If you set false, you can delay capturing.
 ;
 
 $product = new \Issei\Spike\Model\Product('my-product-00001'))
@@ -64,6 +65,15 @@ Call `getCharge()` method with charge id:
 ```php
 /** @var $charge \Issei\Spike\Model\Charge */
 $charge = $spike->getCharge('20150101-100000-xxxxxxxxxx');
+```
+
+### Capture the charge
+
+If you have a charge which has not been captured, you can use `capture()` method to capture it:
+
+```php
+/** @var $charge \Issei\Spike\Model\Charge */
+$capturedCharge = $spike->capture($charge);
 ```
 
 ### Refund the charge
