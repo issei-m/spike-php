@@ -1,6 +1,14 @@
 Changelog
 =========
 
+- 1.0-BETA3 (2015-05-14)
+  - Spike::getCharges(), ::setCard() and ::refund() methods now allow to be passed related object as a string
+  - added ObjectList model object
+  - now supports Dispute object
+  - now supports capturing the charge
+  - renamed Spike::getToken() method to requestToken() (BC Break)
+  - Spike::getToken() method is now used to retrieve the token object
+
 - 1.0-BETA2 (2015-03-30)
   - Charge/RefundFactory now uses system default timezone if none is specified
   - Spike::charge() now avoids error even if request has not set any value at all
