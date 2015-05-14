@@ -147,6 +147,15 @@ Of course, you can create a new charge with it:
 $charge = $spike->charge($token); 
 ```
 
+### Find a token
+
+Call `getToken()` method with token id:
+
+```php
+/** @var $token \Issei\Spike\Model\Token */
+$token = $spike->getToken('tok_xxxxxxxxxxxxxxxxxxxxxxxx');
+```
+
 Installation
 ------------
 
