@@ -168,7 +168,7 @@ class Charge
      * @param  Card $source
      * @return self
      */
-    public function setSource($source)
+    public function setSource(Card $source = null)
     {
         $this->source = $source;
 
@@ -237,7 +237,7 @@ class Charge
      * @param  Dispute $dispute
      * @return self
      */
-    public function setDispute($dispute)
+    public function setDispute(Dispute $dispute = null)
     {
         $this->dispute = $dispute;
 
