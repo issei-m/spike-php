@@ -5,9 +5,9 @@ namespace Issei\Spike;
 use Issei\Spike\Converter\ObjectConverterInterface;
 use Issei\Spike\Converter\RecursiveObjectFactoryConverterBuilder;
 use Issei\Spike\Exception\RequestException;
-use Issei\Spike\Model\Charge;
 use Issei\Spike\Http\Client\CurlClient;
 use Issei\Spike\Http\ClientInterface;
+use Issei\Spike\Model\Charge;
 use Issei\Spike\Model\Token;
 
 /**
@@ -131,7 +131,7 @@ class Spike
     public function charge(ChargeRequest $request)
     {
         $result = $this->request('POST', '/charges', [
-            'card'     => $request->getCard(),
+            'card' => $request->getToken(),
             'amount'   => $request->getAmount() ? $request->getAmount()->getAmount() : null,
             'currency' => $request->getAmount() ? $request->getAmount()->getCurrency() : null,
             'capture'  => $request->isCapture(),

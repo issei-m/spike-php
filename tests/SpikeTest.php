@@ -237,7 +237,7 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('request')
             ->with('POST', Spike::ENDPOINT_PREFIX . '/charges', self::SECRET, [
-                'card' => $request->getCard()->getId(),
+                'card' => $request->getToken()->getId(),
                 'amount' => $request->getAmount()->getAmount(),
                 'currency' => $request->getAmount()->getCurrency(),
                 'capture' => $request->isCapture(),
@@ -377,7 +377,7 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
     {
         $request = new ChargeRequest();
         $request
-            ->setCard(new Token('_card_'))
+            ->setToken(new Token('_card_'))
             ->setAmount(new Money(1000, 'JPY'))
             ->setCapture(false)
             ->addProduct(

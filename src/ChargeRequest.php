@@ -39,7 +39,7 @@ class ChargeRequest
     /**
      * @return Token
      */
-    public function getCard()
+    public function getToken()
     {
         return $this->card;
     }
@@ -48,7 +48,7 @@ class ChargeRequest
      * @param  Token|string $card
      * @return self
      */
-    public function setCard($card)
+    public function setToken($card)
     {
         if (is_string($card)) {
             $card = new Token($card);

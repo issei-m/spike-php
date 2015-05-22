@@ -9,16 +9,16 @@ use Issei\Spike\Model\Token;
 
 class ChargeRequestTest extends \PHPUnit_Framework_TestCase
 {
-    public function testCardAccessors()
+    public function testTokenAccessors()
     {
         $request = new ChargeRequest();
 
         $token = new Token('card-a');
-        $request->setCard($token);
-        $this->assertEquals('card-a', $request->getCard());
+        $request->setToken($token);
+        $this->assertEquals('card-a', $request->getToken());
 
-        $request->setCard('card-b');
-        $token = $request->getCard();
+        $request->setToken('card-b');
+        $token = $request->getToken();
         $this->assertInstanceOf('Issei\Spike\Model\Token', $token, '$card is allowed to be a string.');
         $this->assertEquals('card-b', $token->getId(), '$card is allowed to be a string.');
     }
@@ -29,11 +29,11 @@ class ChargeRequestTest extends \PHPUnit_Framework_TestCase
      * @expectedException        \InvalidArgumentException
      * @expectedExceptionMessage $card must be an instance of Issei\Spike\Model\Token or a string.
      */
-    public function setCard_should_throw_an_InvalidArgumentException_if_given_value_is_neither_Token_instance_nor_string()
+    public function setToken_should_throw_an_InvalidArgumentException_if_given_value_is_neither_Token_instance_nor_string()
     {
         $request = new ChargeRequest();
 
-        $request->setCard(null);
+        $request->setToken(null);
     }
 
     public function testAmountAccessors()

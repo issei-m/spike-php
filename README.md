@@ -29,7 +29,7 @@ $token = new \Issei\Spike\Model\Token('tok_xxxxxxxxxxxxxxxxxxxxxxxx');
 
 $request = new \Issei\Spike\ChargeRequest();
 $request
-    ->setCard($token)
+    ->setToken($token)
     ->setAmount(123.45, 'USD')
     ->setCapture(true) // If you set false, you can delay capturing.
 ;
@@ -53,7 +53,7 @@ $createdCharge = $spike->charge($request);
 Tips: You can pass the `Token`'s id directly instead of generating the new `Token` object:
 
 ```php
-$request->setCard('tok_xxxxxxxxxxxxxxxxxxxxxxxx');
+$request->setToken('tok_xxxxxxxxxxxxxxxxxxxxxxxx');
 ```
 
 **NOTE**: If you want to know how to get a `card token`, read [Request a token](#request-a-token) section.
@@ -145,7 +145,7 @@ Of course, you can create a new charge with it:
 ```php
 $request = new \Issei\Spike\ChargeRequest();
 $request
-    ->setCard($token)
+    ->setToken($token)
     // ...
 ;
 

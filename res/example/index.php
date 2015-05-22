@@ -28,7 +28,7 @@ echo '<h1>New charge</h1>';
 $req = new \Issei\Spike\ChargeRequest();
 $req
     ->setAmount(100, 'JPY')
-    ->setCard($token)
+    ->setToken($token)
     ->addProduct(
         (new \Issei\Spike\Model\Product(uniqid('product-', true)))
             ->setTitle('Title')
