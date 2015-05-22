@@ -143,8 +143,14 @@ $token = $spike->requestToken($request);
 Of course, you can create a new charge with it:
 
 ```php
+$request = new \Issei\Spike\ChargeRequest();
+$request
+    ->setCard($token)
+    // ...
+;
+
 /** @var $charge \Issei\Spike\Model\Charge */
-$charge = $spike->charge($token); 
+$charge = $spike->charge($request); 
 ```
 
 ### Find a token
