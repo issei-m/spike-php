@@ -32,7 +32,7 @@ final class RecursiveObjectFactoryConverterBuilder
         $this->dateTimeZone = $dateTimeZone;
     }
 
-    public function getBuilder()
+    public function getConverter()
     {
         $dateTimeUtil = new DateTimeUtil($this->dateTimeZone);
 

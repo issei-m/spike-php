@@ -38,7 +38,7 @@ class Spike
     {
         $this->secret          = $secret;
         $this->httpClient      = $httpClient ?: new CurlClient();
-        $this->objectConverter = $objectConverter ?: static::getDefaultObjectConverterBuilder()->getBuilder();
+        $this->objectConverter = $objectConverter ?: static::getDefaultObjectConverterBuilder()->getConverter();
     }
 
     /**
