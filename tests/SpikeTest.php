@@ -266,7 +266,7 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
                 'card' => null,
                 'amount' => null,
                 'currency' => null,
-                'capture' => true,
+                'capture' => 'true',
                 'products' => json_encode([]),
             ])
             ->willReturn(new Response(200, json_encode(['charge-data'])))
