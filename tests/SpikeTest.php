@@ -240,7 +240,7 @@ class SpikeTest extends \PHPUnit_Framework_TestCase
                 'card' => $request->getToken()->getId(),
                 'amount' => $request->getAmount()->getAmount(),
                 'currency' => $request->getAmount()->getCurrency(),
-                'capture' => $request->isCapture(),
+                'capture'  => $request->isCapture() ? 'true': 'false',
                 'products' => json_encode($request->getProducts()),
             ])
             ->will($this->returnValue(new Response(200, json_encode(['charge-data']))))
