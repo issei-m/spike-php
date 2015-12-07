@@ -131,10 +131,10 @@ class Spike
     public function charge(ChargeRequest $request)
     {
         $result = $this->request('POST', '/charges', [
-            'card' => $request->getToken(),
+            'card'     => $request->getToken(),
             'amount'   => $request->getAmount() ? $request->getAmount()->getAmount() : null,
             'currency' => $request->getAmount() ? $request->getAmount()->getCurrency() : null,
-            'capture'  => $request->isCapture() ? 'true': 'false',
+            'capture'  => $request->isCapture() ? 'true' : 'false',
             'products' => json_encode($request->getProducts()),
         ]);
 
