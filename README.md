@@ -34,7 +34,8 @@ $request
     ->setCapture(true) // If you set false, you can delay capturing.
 ;
 
-$product = new \Issei\Spike\Model\Product('my-product-00001'))
+$product = new \Issei\Spike\Model\Product('my-product-00001');
+$product
     ->setTitle('Product Name')
     ->setDescription('Description of Product.')
     ->setPrice(123.45, 'USD')
@@ -44,7 +45,7 @@ $product = new \Issei\Spike\Model\Product('my-product-00001'))
 ;
 
 // The product can be added any times.
-$request->addProduct($product); 
+$request->addProduct($product);
 
 /** @var $createdCharge \Issei\Spike\Model\Charge */
 $createdCharge = $spike->charge($request);
@@ -150,7 +151,7 @@ $request
 ;
 
 /** @var $charge \Issei\Spike\Model\Charge */
-$charge = $spike->charge($request); 
+$charge = $spike->charge($request);
 ```
 
 ### Find a token

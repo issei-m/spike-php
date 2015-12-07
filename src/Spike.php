@@ -134,7 +134,7 @@ class Spike
             'card' => $request->getToken(),
             'amount'   => $request->getAmount() ? $request->getAmount()->getAmount() : null,
             'currency' => $request->getAmount() ? $request->getAmount()->getCurrency() : null,
-            'capture'  => $request->isCapture(),
+            'capture'  => $request->isCapture() ? 'true': 'false',
             'products' => json_encode($request->getProducts()),
         ]);
 
