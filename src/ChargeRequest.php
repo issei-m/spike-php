@@ -19,7 +19,7 @@ class ChargeRequest
     /**
      * @var Token
      */
-    private $card;
+    private $token;
 
     /**
      * @var Money
@@ -41,7 +41,7 @@ class ChargeRequest
      */
     public function getToken()
     {
-        return $this->card;
+        return $this->token;
     }
 
     /**
@@ -56,7 +56,7 @@ class ChargeRequest
             throw new \InvalidArgumentException('$card must be an instance of Issei\Spike\Model\Token or a string.');
         }
 
-        $this->card = $card;
+        $this->token = $card;
 
         return $this;
     }
