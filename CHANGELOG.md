@@ -2,7 +2,7 @@ Changelog
 =========
 
 - 1.0-BETA3 (2015-05-14)
-  - Spike::getCharges(), ::setToken() and ::refund() methods now allow to be passed related object as a string
+  - Spike::getCharges(), ::setCard() and ::refund() methods now allow to be passed related object as a string
   - added ObjectList model object
   - now supports Dispute object
   - now supports capturing the charge
