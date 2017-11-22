@@ -4,8 +4,9 @@ namespace Issei\Spike\Tests\Model\Factory;
 
 use Issei\Spike\Model\Factory\RefundFactory;
 use Issei\Spike\Model\Money;
+use PHPUnit\Framework\TestCase;
 
-class RefundFactoryTest extends \PHPUnit_Framework_TestCase
+class RefundFactoryTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

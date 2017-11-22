@@ -4,8 +4,9 @@ namespace Issei\Spike\Tests\Model\Factory;
 
 use Issei\Spike\Model\Card;
 use Issei\Spike\Model\Factory\TokenFactory;
+use PHPUnit\Framework\TestCase;
 
-class TokenFactoryTest extends \PHPUnit_Framework_TestCase
+class TokenFactoryTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

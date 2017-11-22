@@ -4,8 +4,9 @@ namespace Issei\Spike\Tests\Model;
 
 use Issei\Spike\Model\Money;
 use Issei\Spike\Model\Product;
+use PHPUnit\Framework\TestCase;
 
-class ProductTest extends \PHPUnit_Framework_TestCase
+class ProductTest extends TestCase
 {
     public function testJsonSerialize()
     {

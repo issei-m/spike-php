@@ -4,8 +4,9 @@ namespace Issei\Spike\Tests\Model\Factory;
 
 use Issei\Spike\Model\Factory\DisputeFactory;
 use Issei\Spike\Model\Money;
+use PHPUnit\Framework\TestCase;
 
-class DisputeFactoryTest extends \PHPUnit_Framework_TestCase
+class DisputeFactoryTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

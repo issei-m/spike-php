@@ -4,8 +4,9 @@ namespace Issei\Spike\Tests\Model;
 
 use Issei\Spike\Model\Dispute;
 use Issei\Spike\Model\Money;
+use PHPUnit\Framework\TestCase;
 
-class DisputeTest extends \PHPUnit_Framework_TestCase
+class DisputeTest extends TestCase
 {
     public function testAccessors()
     {

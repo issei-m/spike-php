@@ -6,11 +6,12 @@ use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\RequestException;
 use Issei\Spike\Http\Client\GuzzleHttpClient;
 use GuzzleHttp\ClientInterface;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Issei\Spike\Http\Response;
 
-class GuzzleHttpClientTest extends \PHPUnit_Framework_TestCase
+class GuzzleHttpClientTest extends TestCase
 {
     private $client;
     private $SUT;

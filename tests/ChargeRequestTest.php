@@ -6,8 +6,9 @@ use Issei\Spike\ChargeRequest;
 use Issei\Spike\Model\Money;
 use Issei\Spike\Model\Product;
 use Issei\Spike\Model\Token;
+use PHPUnit\Framework\TestCase;
 
-class ChargeRequestTest extends \PHPUnit_Framework_TestCase
+class ChargeRequestTest extends TestCase
 {
     public function testTokenAccessors()
     {

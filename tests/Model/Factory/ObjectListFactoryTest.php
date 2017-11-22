@@ -3,8 +3,9 @@
 namespace Issei\Spike\Tests\Model\Factory;
 
 use Issei\Spike\Model\Factory\ObjectListFactory;
+use PHPUnit\Framework\TestCase;
 
-class ObjectListFactoryTest extends \PHPUnit_Framework_TestCase
+class ObjectListFactoryTest extends TestCase
 {
     /**
      * @var ObjectListFactory

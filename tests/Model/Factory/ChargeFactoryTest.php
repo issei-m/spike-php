@@ -7,8 +7,9 @@ use Issei\Spike\Model\Dispute;
 use Issei\Spike\Model\Factory\ChargeFactory;
 use Issei\Spike\Model\Money;
 use Issei\Spike\Model\Refund;
+use PHPUnit\Framework\TestCase;
 
-class ChargeFactoryTest extends \PHPUnit_Framework_TestCase
+class ChargeFactoryTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

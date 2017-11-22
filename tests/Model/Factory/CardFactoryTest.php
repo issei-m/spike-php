@@ -3,8 +3,9 @@
 namespace Issei\Spike\Tests\Model\Factory;
 
 use Issei\Spike\Model\Factory\CardFactory;
+use PHPUnit\Framework\TestCase;
 
-class CardFactoryTest extends \PHPUnit_Framework_TestCase
+class CardFactoryTest extends TestCase
 {
     /**
      * @var CardFactory
