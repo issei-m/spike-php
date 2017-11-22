@@ -13,7 +13,7 @@ before_script:
     - composer install --dev --no-interaction
 
 script:
-    - vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover=coverage.clover
+    - bin/phpunit -c phpunit.xml.dist --coverage-clover=coverage.clover
 
 after_script:
     - wget https://scrutinizer-ci.com/ocular.phar
