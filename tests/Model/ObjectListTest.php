@@ -3,8 +3,9 @@
 namespace Issei\Spike\Tests\Model;
 
 use Issei\Spike\Model\ObjectList;
+use PHPUnit\Framework\TestCase;
 
-class ObjectListTest extends \PHPUnit_Framework_TestCase
+class ObjectListTest extends TestCase
 {
     public function testGeneral()
     {

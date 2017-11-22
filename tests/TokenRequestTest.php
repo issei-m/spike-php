@@ -3,8 +3,9 @@
 namespace Issei\Spike\Tests;
 
 use Issei\Spike\TokenRequest;
+use PHPUnit\Framework\TestCase;
 
-class TokenRequestTest extends \PHPUnit_Framework_TestCase
+class TokenRequestTest extends TestCase
 {
     public function testSetCardNumber()
     {

@@ -4,6 +4,7 @@ namespace Issei\Spike\Tests\Converter;
 
 use Issei\Spike\Converter\RecursiveObjectFactoryConverter;
 use Issei\Spike\Model\Factory\ObjectFactoryInterface;
+use PHPUnit\Framework\TestCase;
 
 class ConcreteFactoryA implements ObjectFactoryInterface
 {
@@ -30,7 +31,7 @@ class ConcreteFactoryB extends ConcreteFactoryA
     }
 }
 
-class RecursiveObjectFactoryConverterTest extends \PHPUnit_Framework_TestCase
+class RecursiveObjectFactoryConverterTest extends TestCase
 {
     private static $testData = [
         [

@@ -7,8 +7,9 @@ use Issei\Spike\Model\Charge;
 use Issei\Spike\Model\Dispute;
 use Issei\Spike\Model\Money;
 use Issei\Spike\Model\Refund;
+use PHPUnit\Framework\TestCase;
 
-class ChargeTest extends \PHPUnit_Framework_TestCase
+class ChargeTest extends TestCase
 {
     public function testToString()
     {

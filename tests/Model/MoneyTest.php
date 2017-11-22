@@ -3,8 +3,9 @@
 namespace Issei\Spike\Tests\Model;
 
 use Issei\Spike\Model\Money;
+use PHPUnit\Framework\TestCase;
 
-class MoneyTest extends \PHPUnit_Framework_TestCase
+class MoneyTest extends TestCase
 {
     public function testAccessors()
     {

@@ -3,8 +3,9 @@
 namespace Issei\Spike\Tests\Util;
 
 use Issei\Spike\Util\DateTimeUtil;
+use PHPUnit\Framework\TestCase;
 
-class DateTimeUtilTest extends \PHPUnit_Framework_TestCase
+class DateTimeUtilTest extends TestCase
 {
     /**
      * @var \DateTime

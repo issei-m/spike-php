@@ -12,8 +12,9 @@ use Issei\Spike\Model\Product;
 use Issei\Spike\Model\Token;
 use Issei\Spike\Spike;
 use Issei\Spike\TokenRequest;
+use PHPUnit\Framework\TestCase;
 
-class SpikeTest extends \PHPUnit_Framework_TestCase
+class SpikeTest extends TestCase
 {
     const SECRET = '_SECRET_';
 

@@ -3,8 +3,9 @@
 namespace Issei\Spike\Tests\Exception;
 
 use Issei\Spike\Exception\RequestException;
+use PHPUnit\Framework\TestCase;
 
-class RequestExceptionTest extends \PHPUnit_Framework_TestCase
+class RequestExceptionTest extends TestCase
 {
     public function testConstructor()
     {

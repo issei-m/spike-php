@@ -3,8 +3,9 @@
 namespace Spike\Tests\Http\Client;
 
 use Issei\Spike\Http\Client\CurlClient;
+use PHPUnit\Framework\TestCase;
 
-class CurlClientTest extends \PHPUnit_Framework_TestCase
+class CurlClientTest extends TestCase
 {
     /**
      * @var CurlClient

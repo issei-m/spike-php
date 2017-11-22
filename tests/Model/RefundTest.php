@@ -4,8 +4,9 @@ namespace Issei\Spike\Tests\Model;
 
 use Issei\Spike\Model\Money;
 use Issei\Spike\Model\Refund;
+use PHPUnit\Framework\TestCase;
 
-class RefundTest extends \PHPUnit_Framework_TestCase
+class RefundTest extends TestCase
 {
     public function testCreatedAccessors()
     {

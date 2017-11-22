@@ -1,7 +1,6 @@
 language: php
 
 php:
-  - 5.4
   - 5.5
   - 5.6
   - 7.0
@@ -14,7 +13,7 @@ before_script:
     - composer install --dev --no-interaction
 
 script:
-    - vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover=coverage.clover
+    - bin/phpunit -c phpunit.xml.dist --coverage-clover=coverage.clover
 
 after_script:
     - wget https://scrutinizer-ci.com/ocular.phar
