@@ -38,13 +38,11 @@ class GuzzleHttpClient implements ClientInterface
         ];
 
         if ('GET' !== $method) {
-            $options['body'] = $params;
+            $options['form_params'] = $params;
         }
 
-        $request = $this->client->createRequest($method, $url, $options);
-
         try {
-            $rawResponse = $this->client->send($request);
+            $rawResponse = $this->client->request($method, $url, $options);
         } catch (RequestException $e) {
             $rawResponse = $this->handleException($e);
         }

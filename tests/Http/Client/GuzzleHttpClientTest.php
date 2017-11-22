@@ -5,17 +5,14 @@ namespace Spike\Tests\Http\Client;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\RequestException;
 use Issei\Spike\Http\Client\GuzzleHttpClient;
+use GuzzleHttp\ClientInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use Issei\Spike\Http\Response;
 
 class GuzzleHttpClientTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     private $client;
-
-    /**
-     * @var GuzzleHttpClient
-     */
     private $SUT;
 
     private static $params = [
@@ -27,68 +24,38 @@ class GuzzleHttpClientTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->client = $this->getMock('GuzzleHttp\ClientInterface');
-        $this->SUT = new GuzzleHttpClient($this->client);
-    }
-
-    private function expect_that_client_will_be_called_createRequest_method_with($method, $url, $options)
-    {
-        $request = $this->getMock('GuzzleHttp\Message\RequestInterface');
-
-        $this->client
-            ->expects($this->once())
-            ->method('createRequest')
-            ->with($method, $url, $options)
-            ->will($this->returnValue($request))
-        ;
-
-        return $request;
+        $this->client = $this->prophesize(ClientInterface::class);
+        $this->SUT = new GuzzleHttpClient($this->client->reveal());
     }
 
     public function testGetRequest()
     {
-        $request = $this->expect_that_client_will_be_called_createRequest_method_with('GET', 'http://localhost/', self::$params);
+        $rawResponse = $this->prophesize(ResponseInterface::class);
+        $rawResponse->getStatusCode()->willReturn(200);
+        $rawResponse->getBody()->willReturn('_body_');
 
-        $rawResponse = $this->getMock('GuzzleHttp\Message\ResponseInterface');
-
-        $this->client
-            ->expects($this->once())
-            ->method('send')
-            ->with($this->identicalTo($request))
-            ->will($this->returnValue($rawResponse))
-        ;
-
-        $rawResponse->expects($this->once())->method('getStatusCode')->will($this->returnValue(200));
-        $rawResponse->expects($this->once())->method('getBody')->will($this->returnValue('_body_'));
+        $this->client->request('GET', 'http://localhost/', self::$params)->willReturn($rawResponse);
 
         $response = $this->SUT->request('GET', 'http://localhost/', '_secret_');
-        $this->assertInstanceOf('Issei\Spike\Http\Response', $response);
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('_body_', $response->getBody());
+        self::assertInstanceOf(Response::class, $response);
+        self::assertEquals(200, $response->getStatusCode());
+        self::assertEquals('_body_', $response->getBody());
     }
 
     public function testPostRequest()
     {
-        $request = $this->expect_that_client_will_be_called_createRequest_method_with('POST', 'http://localhost/', array_merge(self::$params, [
-            'body'            => ['foo' => 'bar'],
-        ]));
+        $rawResponse = $this->prophesize(ResponseInterface::class);
+        $rawResponse->getStatusCode()->willReturn(200);
+        $rawResponse->getBody()->willReturn('_body_');
 
-        $rawResponse = $this->getMock('GuzzleHttp\Message\ResponseInterface');
-
-        $this->client
-            ->expects($this->once())
-            ->method('send')
-            ->with($this->identicalTo($request))
-            ->will($this->returnValue($rawResponse))
-        ;
-
-        $rawResponse->expects($this->once())->method('getStatusCode')->will($this->returnValue(200));
-        $rawResponse->expects($this->once())->method('getBody')->will($this->returnValue('_body_'));
+        $this->client->request('POST', 'http://localhost/', array_merge(self::$params, [
+            'form_params' => ['foo' => 'bar'],
+        ]))->willReturn($rawResponse);
 
         $response = $this->SUT->request('POST', 'http://localhost/', '_secret_', ['foo' => 'bar']);
-        $this->assertInstanceOf('Issei\Spike\Http\Response', $response);
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('_body_', $response->getBody());
+        self::assertInstanceOf(Response::class, $response);
+        self::assertEquals(200, $response->getStatusCode());
+        self::assertEquals('_body_', $response->getBody());
     }
 
     /**
@@ -96,24 +63,17 @@ class GuzzleHttpClientTest extends \PHPUnit_Framework_TestCase
      */
     public function it_should_return_Response_even_if_guzzle_throws_BadResponseException()
     {
-        $request = $this->expect_that_client_will_be_called_createRequest_method_with('GET', 'http://localhost/', self::$params);
+        $rawResponse = $this->prophesize(ResponseInterface::class);
+        $rawResponse->getStatusCode()->willReturn(403);
+        $rawResponse->getBody()->willReturn('_body_');
 
-        $rawResponse = $this->getMock('GuzzleHttp\Message\ResponseInterface');
-
-        $this->client
-            ->expects($this->once())
-            ->method('send')
-            ->with($this->identicalTo($request))
-            ->will($this->throwException(new BadResponseException('', $request, $rawResponse)))
-        ;
-
-        $rawResponse->expects($this->once())->method('getStatusCode')->will($this->returnValue(400));
-        $rawResponse->expects($this->once())->method('getBody')->will($this->returnValue('_body_'));
+        $exception = new BadResponseException('error_message', $this->prophesize(RequestInterface::class)->reveal(), $rawResponse->reveal());
+        $this->client->request('GET', 'http://localhost/', self::$params)->willThrow($exception);
 
         $response = $this->SUT->request('GET', 'http://localhost/', '_secret_');
-        $this->assertInstanceOf('Issei\Spike\Http\Response', $response);
-        $this->assertEquals(400, $response->getStatusCode());
-        $this->assertEquals('_body_', $response->getBody());
+        self::assertInstanceOf(Response::class, $response);
+        self::assertEquals(403, $response->getStatusCode());
+        self::assertEquals('_body_', $response->getBody());
     }
 
     /**
@@ -123,14 +83,8 @@ class GuzzleHttpClientTest extends \PHPUnit_Framework_TestCase
      */
     public function it_should_throw_Exception_if_guzzle_throws_RequestException()
     {
-        $request = $this->expect_that_client_will_be_called_createRequest_method_with('GET', 'http://localhost/', self::$params);
-
-        $this->client
-            ->expects($this->once())
-            ->method('send')
-            ->with($this->identicalTo($request))
-            ->will($this->throwException(new RequestException('error_message', $request, $this->getMock('GuzzleHttp\Message\ResponseInterface'))))
-        ;
+        $exception = new RequestException('error_message', $this->prophesize(RequestInterface::class)->reveal(), $this->prophesize(ResponseInterface::class)->reveal());
+        $this->client->request('GET', 'http://localhost/', self::$params)->willThrow($exception);
 
         $this->SUT->request('GET', 'http://localhost/', '_secret_');
     }
