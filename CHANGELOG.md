@@ -1,6 +1,10 @@
 Changelog
 =========
 
+- 1.0-BETA5 (201x-xx-xx)
+  - Start supporting PHP 7.2
+  - Ensure dev stuff (e.g. tests, .gitignore, etc) is removed when package installation by adding `.gitattributes`
+
 - 1.0-BETA4 (2016-12-22)
   - Starting PHP 7.1 support
   - Fix wrong parameter of charge api
