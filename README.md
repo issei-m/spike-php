@@ -6,7 +6,7 @@ Spike for PHP
 [![Code Coverage](https://scrutinizer-ci.com/g/issei-m/spike-php/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/issei-m/spike-php/?branch=master)
 [![License](https://poser.pugx.org/issei-m/spike-php/license.svg)](https://packagist.org/packages/issei-m/spike-php)
 
-Latest release: [v1.0-BETA4](https://packagist.org/packages/issei-m/spike-php#v1.0-BETA4)
+Latest release: [v1.0-BETA5](https://packagist.org/packages/issei-m/spike-php#v1.0-BETA5)
 
 The client of https://spike.cc REST api for PHP (5.4+, 7+, HHVM).
 
