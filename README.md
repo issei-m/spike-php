@@ -6,6 +6,8 @@ Spike for PHP
 
 This project is already abandoned due to [SPIKE](https://spike.cc) payment service close, and you can no longer access to their api endpoint anymore.
 
+---
+
 Latest release: [v1.0-BETA5](https://packagist.org/packages/issei-m/spike-php#v1.0-BETA5)
 
 The client of https://spike.cc REST api for PHP (5.4+, 7+, HHVM).
