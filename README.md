@@ -1,10 +1,10 @@
 Spike for PHP
 =============
 
-[![Build Status](https://travis-ci.org/issei-m/spike-php.svg)](https://travis-ci.org/issei-m/spike-php)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/issei-m/spike-php/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/issei-m/spike-php/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/issei-m/spike-php/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/issei-m/spike-php/?branch=master)
-[![License](https://poser.pugx.org/issei-m/spike-php/license.svg)](https://packagist.org/packages/issei-m/spike-php)
+\[ABANDONED\]
+-------------
+
+This project is already abandoned due to [SPIKE](https://spike.cc) payment service close, and you can no longer access to their api endpoint anymore.
 
 Latest release: [v1.0-BETA5](https://packagist.org/packages/issei-m/spike-php#v1.0-BETA5)
 
